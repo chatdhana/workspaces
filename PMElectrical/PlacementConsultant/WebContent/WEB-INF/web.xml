@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	
+	<display-name>HelloWorld</display-name>
+	
+	 
+	   <welcome-file-list>
+			<welcome-file>Home.jsp</welcome-file>
+	   </welcome-file-list>
+	
+	 <servlet>
+		 <servlet-name>SeekerReport</servlet-name>
+   		 <servlet-class>com.virtusa.placement.controller.SeekerReport</servlet-class>
+	 </servlet>
+	 <servlet-mapping>
+    	<servlet-name>SeekerReport</servlet-name>
+   	    <url-pattern>/SeekerReport</url-pattern>
+ 	 </servlet-mapping>
+    <servlet>
+	 	 <servlet-name>RecruiterReport</servlet-name>
+   		 <servlet-class>com.virtusa.placement.controller.RecruiterReport</servlet-class>
+	 </servlet>
+	 <servlet-mapping>
+    	<servlet-name>RecruiterReport</servlet-name>
+    	<url-pattern>/RecruiterReport</url-pattern>
+ 	 </servlet-mapping>
+  
+ 	 <servlet>
+  		<servlet-name>Contact</servlet-name>
+  		<servlet-class>
+  		com.virtusa.placement.controller.Contact</servlet-class>
+  	 </servlet>
+	 
+	 <servlet-mapping>
+	 	<servlet-name>Contact</servlet-name>
+	 	<url-pattern>/Contact</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet>
+		<display-name>
+		CheckUser</display-name>
+		<servlet-name>CheckUser</servlet-name>
+		<servlet-class>
+		com.virtusa.placement.controller.CheckUser</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>CheckUser</servlet-name>
+		<url-pattern>/CheckUser</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>
+		GetInformation</display-name>
+		<servlet-name>GetInformation</servlet-name>
+		<servlet-class>
+		com.virtusa.placement.controller.GetInformation</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetInformation</servlet-name>
+		<url-pattern>/GetInformation</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Payment_servlet</servlet-name>
+		<servlet-class>com.virtusa.placement.controller.Payment_servlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Payment_servlet</servlet-name>
+		<url-pattern>/Payment_servlet</url-pattern>
+	</servlet-mapping> 
+	
+	<servlet>
+		<display-name>
+		GetAmount</display-name>
+		<servlet-name>GetAmount</servlet-name>
+		<servlet-class>
+		com.virtusa.placement.controller.GetAmount</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetAmount</servlet-name>
+		<url-pattern>/GetAmount</url-pattern>
+	</servlet-mapping> 
+	
+	<servlet>
+		<display-name>
+		confirm_pay</display-name>
+		<servlet-name>confirm_pay</servlet-name>
+		<servlet-class>
+		com.virtusa.placement.controller.confirm_pay</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>confirm_pay</servlet-name>
+		<url-pattern>/confirm_pay</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<display-name>
+		paynow</display-name>
+		<servlet-name>paynow</servlet-name>
+		<servlet-class>
+		com.virtusa.placement.controller.paynow</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>paynow</servlet-name>
+		<url-pattern>/paynow</url-pattern>
+	</servlet-mapping>
+  
+	<filter>
+        <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+   
+	
+	<error-page>
+	<exception-type>java.lang.NullPointerException</exception-type>
+	<location>/temp.jsp</location>
+	</error-page>
+	<error-page>
+	<error-code>500</error-code>
+	<location>/temp.jsp</location>	
+	</error-page>
+	  
+	<error-page>
+	<error-code>404</error-code>
+	<location>/temp.jsp</location>	
+	</error-page>
+		
+	
+</web-app>

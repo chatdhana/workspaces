@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<description>Bean definition inheritance / Bean definition templating</description>
+
+	<!-- A bean definition can contain:
+		*) configuration information (constructor arguments, property values, method overrides, and so on).
+		*) container-specific information (initialization method, destruction method, static factory method, and so on) -->
+	<!-- A child bean definition inherits a few configuration information from its parent definition -->
+	<!-- By using bean definition inheritance or templating we can save a lot of typing. -->
+	<!-- A parent bean definition / template : has abstract="true" attribute on <bean/> -->
+	<!-- Container ignores abstract beans from instantiation. If you try to use getBean() for abstract bean, return an error. -->
+	
+	<!-- <bean id="beanTemplate" abstract="true" init-method="init" destroy-method="destroy" factory-method="getInstance"
+		factory-bean="factoryBeanName" /> -->
+	
+	<!-- Just a bean template without class specification where abstract="true" is required. -->
+	<bean id="beanTemplate" abstract="true" init-method="init" destroy-method="destroy"/>
+	
+	<!-- Bean template with class specification where abstract="true" is not required.-->
+	<bean id="parentBeanOrBeanTemplate" class="mine.spring.bean.ParentBeanOrBeanTemplate" parent="beanTemplate">
+		<property name="prntStringField" value="parent field"/>
+	</bean>
+
+	<!-- a child bean definition: has parent="beanName" attribute on <bean/>-->
+	<!-- A child bean definition uses the bean class from the parent bean definition if none is specified, but can also override it. -->
+	<!-- But to override class in parent bean definition: The child class must be compatible with the parent class, that is, 
+		it must accept the parent's property values. -->
+	<bean id="childBean1" class="mine.spring.bean.ChildBean" parent="parentBeanOrBeanTemplate">
+		<!-- Overrides prntStringField property of parent -->
+		<property name="prntStringField" value="overridding parent's value" />
+	</bean>
+	
+	<bean id="childBean2" class="mine.spring.bean.ChildBean" parent="parentBeanOrBeanTemplate">
+		<!-- Inherits prntStringField property from parent bean -->
+	</bean>
+	
+	<bean id="childBean3" parent="parentBeanOrBeanTemplate">
+		<!-- Uses a class name specified in its parent bean while inheriting the configuration informations -->
+	</bean>
+	
+</beans>

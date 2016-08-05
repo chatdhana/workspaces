@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+	default-init-method="init" default-destroy-method="destroy">
+	<description>Customizing the nature of a bean (Bean Lifecycle)
+		# Initialization Callbacks (Bean level)
+			# init-method attribute (WITHOUT coupling your classes to Spring)
+			# InitializingBean interface (WITH coupling your classes to Spring)
+			# @PostConstruct annotation
+		# Destruction Callbacks (Bean level)
+			# destroy-method attribute (WITHOUT coupling your classes to Spring)
+			# DisposableBean interface (WITH coupling your classes to Spring)
+			# @PreConstruct annotation
+		# Default initialization and destroy methods (Container level)
+		# Implementing BeanPostprocessor for custom features or other lifecycle mechanisms.
+		# Combining lifecycle mechanisms.
+		# Startup and shutdown callbacks (using Lifecycle and LifecycleProcessor)
+		# Shutting down IoC container gracefully in non-web applications
+		# Aware interfaces (Infrastructure dependency injection mechanism)
+	</description>
+
+	<!-- Need for lifecycle callbacks: To interact with container's management of the bean lifecycle, to build custom features, 
+		or to build new lifecyle behaviors. -->
+
+	<!-- ### Initialization callbacks -->
+	<!-- The container guarantees that a configured initialization callback is called immediately after a bean is supplied with 
+		all dependencies.Thus the initialization callback is called on the raw bean reference, which means that AOP interceptors 
+		and so forth are not applied to the bean. -->
+	
+	<!-- ### # init-method attribute (WITHOUT coupling your classes to Spring) -->
+	<!-- Define custom initialization method using init-method="initMethodName"; This init method should have no arguments, return void but may 
+		throw any exception. -->
+	<!-- Defined init method is called by container after a bean is instantiated (by constructor and/or property setters) -->
+	<!-- Order: 1) Constrcutor 2) Property 3) init-method  -->
+	<bean id="lifecycleCallback-init-method" class="mine.spring.bean.lifecycle.InitializationCallbackUsingInitMethod"
+		init-method="initMethod">
+		<constructor-arg value="2" />
+		<constructor-arg value="via constructor" />
+		<constructor-arg><null/></constructor-arg>
+		<property name="stringField" value="via property"/>
+	</bean>
+	
+	<!-- ### # InitializingBean interface (WITH coupling your classes to Spring)  -->
+	<!-- The InitializingBean interface allows a bean to perform initialization work after all necessary properties on the bean 
+		have been set by the container. -->
+	<!-- It specifies a single method afterPropertiesSet() -->
+	<!-- Using InitializingBean is not recommended because it unnecessarily couples the code to Spring. Instead use POJO based 
+		init-method. -->
+	<!-- Order: 1) Constrcutor 2) Property 3) InitializingBean's afterPropertiesSet() 4) init-method  -->
+	<bean id="lifecycleCallback-InitializingBean" class="mine.spring.bean.lifecycle.InitializationCallbackUsingInitializingBean"
+		init-method="initMethod">
+		<constructor-arg value="2" />
+		<constructor-arg value="via constructor" />
+		<constructor-arg><null/></constructor-arg>
+		<property name="stringField" value="via property"/>
+	</bean>
+	
+	<!-- ### Destruction callbacks -->
+	<!-- ### # destroy-method attribute (WITHOUT coupling your classes to Spring) -->
+	<!-- The custom destroy-method allows you to specify the method to be invoked on bean factory shutdown. -->
+	<!-- Only invoked on the beans whose lifecycle is fully controlled by the bean factory (which is always case for singleton 
+		but not for other scoped beans) -->
+	<bean id="lifecycleCallBack-destroy-method" class="mine.spring.bean.lifecycle.DestructionCallbackUsingDestroyMethod"
+		destroy-method="destroyMethod">
+		<property name="stringField" value="via destroy-method" />
+	</bean>
+	
+	<!-- ### # DisposableBean interface (WITH coupling your classes to Spring)  -->
+	<!-- It specifies a single method destroy(); should have no args and return void but may throw any exception -->
+	<!-- It is not recommended to use DisposableBean since it couples your code to Spring -->
+	<!-- Alternatively use custom destroy method (destroy-method) -->
+	<!-- Order: 1) DisposableBean's destroy() 2) destroy-method  -->
+	<bean id="lifecycleCallBack-DisposableBean" class="mine.spring.bean.lifecycle.DestructionCallbackUsingDisposableBean"
+		destroy-method="destroyMethod">
+		<property name="stringField" value="via DisposableBean and destroyMethod" />
+	</bean>
+	
+	<!-- ### Default initialization and destroy methods (Container level) -->
+	<!-- Configure the container to look for named initialization and destruction method names on every bean. -->
+	<!-- The names of such lifecycle callback methods are standardized across a project. -->
+	<!-- The presence of the default-init-method="initMethodname" attribute on the top level <beans/> element causes the container 
+		to recognize the "initMethoName" on the beans; when the bean is created and assembled and if a bean has such a method then 
+		it's invoked. -->
+	<!-- Similarly, presence of default-destroy-method="destroyMethodName" attribute on <beans/> element causes the container 
+		to recognize the "destroyMethodName" on the beans; when the container is shutting down and if the bean has such method then 
+		it's invoked. -->
+	<!-- Container level lifecycle callback declarations could be overridden by bean specific declarations (init-method/destroy-method) -->
+	<bean id="defaultLifecycleCallbackMethods" class="mine.spring.bean.lifecycle.ContainerLevelLifecycleCallbackMethods" />
+	<bean id="defaultLifecycleCallbackMethodsOverridden" class="mine.spring.bean.lifecycle.ContainerLevelLifecycleCallbackMethods"  init-method="initMethod" destroy-method="destroyMethod" />
+	
+	<!-- ### @PostConstruct and @PreDestroy annotations -->
+	<!-- <context:annotation-config/> -->
+	<!-- <bean id="postConstructAndPreDestroy" class="mine.spring.bean.lifecycle.PostConstructAndPreDestroy"></bean> -->
+	
+	<!-- ### Combining lifecycle mechanisms -->
+	<!-- Three options/mechanisms for controlling bean lifecycle behavior:
+		1) InitializingBean and DisposableBean callback interfaces
+		2) Custom init and destroy methods
+		3) @PostConstruct and @PreConstruct annotations
+	  -->
+	<!-- If multiple mechanisms are configured for a bean and each mechanism is configured with different method names, then 
+		each configured method is executed in the order listed below. However, if the same method name is configured for more than 
+		one mechanism, then that method is executed only once. -->
+	<!-- Order of initialization:
+		1) Methods annotated with @PostConstruct
+		2) InitializingBean's afterpropertiesSet()
+		3) Custom init method
+		
+		Order of destruction:
+		1) Methods annotated with @PreDestroy
+		2) DisposableBean's destroy()
+		3) Custom deploy method
+		 -->
+	<!-- <context:annotation-config/> -->
+	<bean id="combinedLifecyclemechanisms" class="mine.spring.bean.lifecycle.CombinedLifecyclemechanisms" init-method="initMethod"
+		destroy-method="destroyMethod" />
+	  
+	<!-- ### Startup and shutdown callbacks (using Lifecycle and LifecycleProcessor) -->
+	<!-- To perform lifecycle specific operations on container startup or shutdown. -->
+	<!-- Interface defining methods for start/stop lifecycle control. -->
+	<!-- The lifecycle interface defines the essential methods for any object that has its own lifecycle requirements (startup 
+		and shutdown) -->
+	<!-- Any Spring managed bean (bean or container) may implement this interface,
+		*) bean : starts this component
+		*) bean factory (container) : cascades the call to all the beans of this container by delegating to a LifeCycleProcessor -->
+	<!-- The LifecycleProcessor is itself an extension of the Lifecycle interface. It also adds two other methods for reacting 
+		to the context being refreshed and closed. -->
+	<!-- The Order of startup and shutdown invocations: 
+		*) If a "depends-on" relationship exists between two objects, the dependent side will start after its dependency, and it will stop before its dependency.
+		*) If direct dependencies are unknown, use Phased style, SmartLifecycle -->
+	<!-- The default implementation of LifecycleProcessor is DefaultLifecycleProcessor, will wait up to its timeout period (default 
+		to 30 secs). Define DefaultLifecycleProcessor bean with name/id lifecycleProcessor to overwrite timeout value using timeoutPerShutdownPhase 
+		property. -->
+	
+	<!-- The SmartLifecycle interface defines another options getPhase() as defined in its super interface Phased, and stop() accepts callback-method. -->
+	<!-- When starting, the objects with lowest phase start first. And when stopping, the reverse order is followed. -->
+	<!-- An object that implements SmartLifecycle and whose getPhase() method returns MIN_VALUE would be among the first to start and the last to stop. -->
+	<!-- Default phase of an object for any normal Lifecycle object that doesn't implement SmartLifecycle would be "0". -->
+	<!-- The stop(Runnable) in SmartLifeCycle: Enables asynchronous shutdown where necessary. -->
+	
+	
+	<!-- To overwrite default timeout period (30 secs) of DefaultLifecycleProcessor -->
+	<!-- <bean id="lifecycleProcessor" class="org.springframework.context.support.DefaultLifecycleProcessor">
+		<property name="timeoutPerShutdownPhase" value="10000"/>
+	</bean> -->
+
+	<!-- Bean Lifecycle -->
+	<bean id="beanLifecycle" class="mine.spring.bean.lifecycle.BeanLifecycle" />
+	<!-- Container Lifecycle -->
+	<bean id="containerLifecycle" class="mine.spring.bean.lifecycle.ContainerLifecycle" />
+	<!-- Bean SmartLifecycle -->
+	<bean id="beanSmartLifecycle" class="mine.spring.bean.lifecycle.BeanSmartLifecycle" depends-on="collBeanSmartLifecycle"/>
+	<!-- Container SmartLifecycle -->
+	<bean id="containerSmartLifecycle" class="mine.spring.bean.lifecycle.ContainerSmartLifecycle" />
+	<bean id="collBeanSmartLifecycle" class="mine.spring.bean.lifecycle.CollBeanSmartLifecycle" />
+	
+	<!-- Shutting down IoC container gracefully in NON-web applications -->
+	<!-- If you are using Spring's IoC container in non-web applications, you register a shutdown hook with the JVM. It ensures 
+		a graceful shutdown and calls the relevant destroy methods on your singleton beans so that all resources are released. -->
+	<!-- Call registerShutdownHook() method on AbstractApplicationContext, to register a shutdown hook. -->
+	
+	<!-- ### Aware interfaces (Infrastructure dependency injection mechanism) -->
+	<!-- Spring offers a range of Aware interfaces that allow beans to indicate to the container that they require a certain 
+		infrastructure dependency. -->
+	<!-- Useful for infrastructure beans that require programmatic access to the container. -->
+	<!-- Order: Each Aware interface provides a callback method (like, setApplicationContext, setBeanName,..). The callback is invoked 
+		after population of normal bean properties but before an initialization callback. -->
+	
+	<!-- ### # ApplicationContextAware and BeanFactoryAware - the bean is provided with a reference to the ApplicationContext -->
+	<!-- When an ApplicationConext creates a class which implements ApplicationContextAware interface, the class is provided 
+		with a reference to that ApplicationContext. -->
+	<!-- This allows beans to manipulate programmatically the ApplicationContext that created them and lookup for other beans. -->
+	<!-- Disadvantage: It couples the code to Spring and doesn't follow the IoC style. -->
+	<!-- Alternative to get ApplicationContext: Autowiring by "constructor"or "byType"-->
+	<bean id="myAppCtxAware" class="mine.spring.bean.lifecycle.aware.MyAppCtxAware"/>
+	<bean id="myBeanFactoryAware" class="mine.spring.bean.lifecycle.aware.MyBeanFactoryAware"/>
+	
+	<!-- ### # BeanNameAware - the bean is provided with a referecne to the name defined in its bean definition. -->
+	<bean id="myBeanNameAware" class="mine.spring.bean.lifecycle.aware.MyBeanNameAware"/>
+	
+	<!-- ### # Other Aware interfaces -->
+	<bean id="myOtherAwares" class="mine.spring.bean.lifecycle.aware.MyOtherAwares"/>
+		
+</beans>

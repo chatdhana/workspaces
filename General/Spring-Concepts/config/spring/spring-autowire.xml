@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-autowire="no" default-autowire-candidates="NoBean">
+
+	<description> Auto-wiring collaborators:
+		# Autowiring modes
+		# Autowiring Arrays and typed-collections
+		# Primary bean
+		# Excluding a bean from autowiring
+	</description>
+	
+	<!-- The Spring container can autowire relationships between collaborating beans. You can allow Spring to resolve collaborators 
+		(other beans) automatically for your bean by inspecting the contents of the ApplicationContext. -->
+	<!-- Advantages of autowiring:
+		1) Reduce the need to specify the constructor arguments or properties.
+		2) Can update a configuration as your objects evolve. Useful during development. -->
+	<!-- You can specify the autowire mode for a bean definition using "autowire" attribute on <bean/> -->
+	<!-- You can specify the autowire mode for a container using "default-autowire" attribute on <beans/> -->
+	<!-- Autowiring types/modes:
+		1) no: No autowiring. Bean references must be defined via ref attribute/element.
+		2) byName: Autowiring by property name.
+		3) byType: Autowiring by property type.
+		4) constructor: Autowiring by constructor argument type.
+		5) autodetect: Chooses constructor or byType through introspection of a bean class.
+		   -->
+	<!-- Explicit dependencies in property and constructor-arg settings always override autowiring.-->
+	<!-- You cannot autowire so-called simple properties such as primitives, Strings, and Classes (and arrays of such simple 
+		properties). -->
+		
+	<bean id="autowireCollBeanA" class="mine.spring.bean.di.AutowireCollBeanA" />
+	<bean id="autowireCollBeanB" class="mine.spring.bean.di.AutowireCollBeanB" />
+
+	
+	<!-- ### MODE no/default: No autowiring, default mode. Externally driven autowiring only. Bean references must be defined via ref attribute/element -->
+	<bean id="autowire-default" class="mine.spring.bean.di.Autowiring" autowire="default">
+		<constructor-arg ref="autowireCollBeanA" />
+		<constructor-arg ref="autowireCollBeanB" />
+		<constructor-arg value="default (set by default-autowire at container level)" />
+	</bean>
+	
+	<bean id="autowire-mode-no" class="mine.spring.bean.di.Autowiring" autowire="no">
+		<constructor-arg ref="autowireCollBeanA" />
+		<constructor-arg ref="autowireCollBeanB" />
+		<constructor-arg value="no (No autowiring)" />
+	</bean>
+
+	<!-- ### MODE byName: Autowiring by property name. Container looks for a bean with the same name as the property that needs to be 
+		autowired. -->
+	<!-- If match not found: org.springframework.beans.factory.NoSuchBeanDefinitionException: No bean named 'autowireCollBeanB' is defined-->
+	<bean id="autowire-mode-byName" class="mine.spring.bean.di.Autowiring" autowire="byName">
+		<property name="mode" value="byName (Autowiring by property name)" />
+	</bean>
+
+	<!-- ### MODE byType: Autowiring by property type. -->
+	<!-- Duplicate bean type found : No unique bean of type [mine.spring.bean.di.AutowireCollBeanA] is defined: expected single 
+		matching bean but found 2: [autowireCollBeanA, autowireCollBeanB] -->
+	<!-- No match found: No harm / Nothing happens; Container doesn't call the respective setter method. Setting the dependency-check="objects" 
+		attribute value specifies that an error should be thrown in this case. -->
+	<bean id="autowire-mode-byType" class="mine.spring.bean.di.Autowiring" autowire="byType">
+		<property name="mode" value="byType (Autowiring by property type)" />
+	</bean>
+	
+	<!-- ### dependency-check="objects" -->
+	<!-- You can combine autowire behavior with dependency checking, which is performed after autowiring completes. -->
+	<!-- <bean id="autowire-mode-byType-with-dependency-check"  class="mine.spring.bean.di.Autowiring" autowire="byType" dependency-check="objects">
+		<property name="mode" value="byType (Autowiring by property type, with dependency-check='objects')" />
+	</bean> -->
+	
+	<!-- ### MODE constructor: Autowiring by constructor argument type. -->
+	<!-- Duplicate bean type found : No unique bean of type [mine.spring.bean.di.AutowireCollBeanA] is defined: expected single 
+		matching bean but found 2: [autowireCollBeanA, autowireCollBeanB] -->
+	<bean id="autowire-mode-constructor" class="mine.spring.bean.di.Autowiring" autowire="constructor">
+		<property name="mode" value="constructor (Autowiring by constructor argument type)" />
+	</bean>
+	
+	<!-- ### MODE autodetect: Chooses constructor or byType through introspection of a bean class. -->
+	<!-- If default constructor is found on the bean then the "byType" mode is applied. -->
+	<!-- <bean id="autowire-mode-autodetect" class="mine.spring.bean.di.Autowiring" autowire="autodetect">
+		<property name="mode" value="autodetect (Chooses constructor or byType; If default constructor is found, the 'byType' mode is applied)" />
+	</bean> -->
+	
+	
+	<!-- ### Autowiring Arrays and typed-collections -->
+	<!-- With byType or constructor mode, you can wire arrays and typed-collections. In such cases all autowire candidates within 
+		the container that match the specified collection type are provided to satisfy the dependency. -->
+	<!-- You can autowire strongly-type Maps if the expected key type is String. i.e. Key:beanName; Value:instance -->
+	<bean id="autowiringCollectionByType" class="mine.spring.bean.di.AutowiringCollection" autowire="byType"/>
+	<bean id="autowiringCollectionConstructor" class="mine.spring.bean.di.AutowiringCollection" autowire="constructor"/>
+
+	<!-- ### Primary bean -->
+	<!-- primary (="true") attribute: Specifies that this bean should be given preference when multiple candidates are qualified to autowire a single-valued 
+		dependency. -->
+	<!-- If two beans of same type set with "primary=true": Error: No unique bean of type [mine.spring.bean.di.AutowireCollBeanB] 
+		is defined: more than one 'primary' bean found among candidates: [autowireCollBeanB, autowireCollBeanBPrimary1, autowireCollBeanBPrimary2] -->
+	
+	<bean id="autowireCollBeanBPrimary1" class="mine.spring.bean.di.AutowireCollBeanB" primary="true"/>
+	<!-- <bean id="autowireCollBeanBPrimary2" class="mine.spring.bean.di.AutowireCollBeanB" primary="true"/> -->
+	
+	
+	<!-- #### Excluding a bean from autowiring -->
+	<!-- autowire-candidate @ <bean/>: Indicates whether or not this bean should be considered when looking for matching candidates to 
+		satisfy another bean's autowiring requirements -->
+	<!-- Per container: Set the autowire-candidate attribute of the <bean/> to false;so that the container makes the bean definition 
+		unavailable to the autowiring infrastructure. -->
+	<!-- dufault-autowire-canditates @ <beans/>: A default bean name pattern for identifying autowire candidates: e.g. "*Service", 
+		"data*", "*Service*", "data*Service". Also accepts a comma-separated list of patterns: e.g. "*Service,*Dao" -->
+	<!-- Container level pattern matching: default-autowire-candidates attribute accepts comma separated list of patterns (*Repo, X*y*z, *Bean) -->
+	<!-- autowire-candidate attribute always takes precedence over default-autowire-candidates. -->
+	<bean id="autowireCollBeanBExcluded" class="mine.spring.bean.di.AutowireCollBeanB" autowire-candidate="false"></bean>
+	
+</beans>

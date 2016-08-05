@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Use this file to deploy some handlers/chains and services      --><!-- Two ways to do this:                                           --><!--   java org.apache.axis.client.AdminClient deploy.wsdd          --><!--      after the axis server is running                          --><!-- or                                                             --><!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   --><!--      from the same directory that the Axis engine runs         --><deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from WebserviceProxyService WSDL service -->
+
+  <service name="WebserviceProxy" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://proxy.ws.mine"/>
+      <parameter name="wsdlServiceElement" value="WebserviceProxyService"/>
+      <parameter name="schemaQualified" value="http://entity.ws.mine,http://proxy.ws.mine"/>
+      <parameter name="wsdlServicePort" value="WebserviceProxy"/>
+      <parameter name="className" value="mine.ws.proxy.WebserviceProxy"/>
+      <parameter name="wsdlPortType" value="WebserviceProxy"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://proxy.ws.mine" name="redirectWebserviceCall" qname="operNS:redirectWebserviceCall" soapAction="">
+        <parameter xmlns:pns="http://proxy.ws.mine" xmlns:tns="http://entity.ws.mine" qname="pns:obj" type="tns:DataEntity"/>
+      </operation>
+      <parameter name="allowedMethods" value="redirectWebserviceCall"/>
+
+      <typeMapping xmlns:ns="http://entity.ws.mine" qname="ns:DataEntity" type="java:mine.ws.entity.DataEntity" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+  </service>
+</deployment>

@@ -1,0 +1,23 @@
+
+1) Use "Web Service" wizard, provide wsdl/implementation-class, select JEE runtime (Tomcat) and JAX-WS runtime (Axis/CFX), choose service deployment level.
+2) Deploy service
+3) Hit the URL to test
+	http://localhost:8080/JAXWS/services/CustomerSrv?wsdl
+	
+	
+	
+Logging Request and Response:
+1) Add log handler at WSDD (server-config.wsdd)
+<!-- WSDD extract -->
+<handler name="log" type="java:org.apache.axis.handlers.LogHandler"/>
+   <globalConfiguration>
+      <requestFlow>
+         <handler type="log"/>
+       </requestFlow>
+       <responseFlow>
+          <handler type="log"/>
+       </responseFlow>
+    </globalConfiguration>
+
+
+Note: Name of the WSDD files (client-config.wsdd and server-config.wsdd) can be changed by using axis.ClientConfigFile and axis.ServerConfigFile system properties

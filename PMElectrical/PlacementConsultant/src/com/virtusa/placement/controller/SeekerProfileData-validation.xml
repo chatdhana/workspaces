@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" 
+
+"http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+
+<validators>
+
+
+<field name="experience">
+
+<field-validator type="requiredstring">
+<message>Experience required</message>
+</field-validator>
+
+
+<field-validator type="regex"> 
+<param name="expression">[0-9]{1,4}</param>
+<message>Only Numbers allowed e.g. 2</message>
+</field-validator>
+
+</field>
+
+<field name="minsal">
+
+<field-validator type="requiredstring">
+<message>Minimum Salary Required</message>
+</field-validator>
+
+
+<field-validator type="regex"> 
+<param name="expression">[0-9]{1,8}</param>
+<message>Only Numbers allowed e.g. 20000</message>
+</field-validator>
+
+</field>
+
+
+<field name="maxsal">
+
+<field-validator type="requiredstring">
+<message>Maximum Salary Required</message>
+</field-validator>
+
+
+<field-validator type="regex"> 
+<param name="expression">[0-9]{1,8}</param>
+<message>Only Numbers allowed e.g. 20000</message>
+</field-validator>
+
+</field>
+
+
+<field name="farea">
+<field-validator type="requiredstring">
+<message>Functional Area Required</message>
+</field-validator>
+</field>
+
+
+<field name="industry">
+<field-validator type="requiredstring">
+<message>Industry type Required</message>
+</field-validator>
+
+</field>
+
+<field name="keyskill1">
+<field-validator type="requiredstring">
+<message>Atleast one key skill Required</message>
+</field-validator>
+</field>
+
+
+<field name="twelfth">
+
+<field-validator type="requiredstring">
+<message>Twelfth percentage Required</message>
+</field-validator>
+<field-validator type="regex">
+<param name="expression">[0-9]{1,5}</param>
+<message>Only Numbers with 2 decimal digits allowed e.g. 90.00</message>
+</field-validator>
+
+</field>
+
+<field name="tenth">
+
+<field-validator type="requiredstring">
+<message>Tenth percentage Required</message>
+</field-validator>
+
+<field-validator type="regex"> 
+<param name="expression">[0-9]{1,5}</param>
+<message>Only Numbers with 2 decimal digits allowed e.g. 90.00</message>
+</field-validator>
+
+</field>
+
+<field name="ug">
+
+<field-validator type="requiredstring">
+<message>Under Graduation Required</message>
+</field-validator>
+
+</field>
+
+
+</validators>
+
+
+
+

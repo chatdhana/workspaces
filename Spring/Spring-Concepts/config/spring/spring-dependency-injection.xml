@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
+
+	<description>Dependency Injection (DI) or Inversion of Control (IoC):
+		# Constructor-based dependency injection
+		# Setter-based dependency injection
+		# Static factory method or Instance factory method (refer spring-overview.xml)
+		# Circular dependency
+		# Straight values (primitives, Strings, and so on)
+		# The idref element
+		# The ref element (References to other beans)
+		# Inner beans
+		# Collections
+		# Collections Merging
+		# XML shortcut with p-namespace
+		# Compound/nested property names (outerField.innerField.deepInnerField)
+		# depends-on : Instantiating indirectly dependent objects (collaborators used in static init block)  using "depends-on" attribute
+		# Lazy-initialized beans (lazy-init="true" @ bean or default-lazy-init="true" @ beans
+		# Auto-wiring collaborators
+		# Checking for dependencies
+		# Method injection
+		# Lookup method injection
+		# Arbitary method replacement
+		# Implementing the ApplicationContextAware
+	</description>
+
+	<!-- Dependency injection is a process whereby objects define their dependencies, that is, the other objects they work with. 
+		The container then injects those dependencies when it creats the bean. This process is inverse of the bean itself controlling 
+		the instantation or location of its dependencies. -->
+
+	<!-- ### Constructor-based DI (for mandatory dependencies) -->
+	<!-- Constructor-based DI is accomplished by the container invoking a constructor with a number of arguments, each representing 
+		a dependency -->
+
+	<!-- Container calls default constructor on the bean definitions with no constructor or setter configured -->
+	<bean id="depBeanA" class="mine.spring.bean.di.DICollBeanA" />
+	<bean id="depBeanB" class="mine.spring.bean.di.DICollBeanB" />
+	
+	<!-- Constructor argument resolution matching occurs using the argument's type; follows the supplied order if no type ambiguity 
+		exists -->
+	<bean id="constructorBasedDI-1" class="mine.spring.bean.di.ConstructorBasedDI">
+		<constructor-arg ref="depBeanA" />
+		<constructor-arg ref="depBeanB" />
+	</bean>
+
+	<!--  Mixer of type and order of arg -->
+	<bean id="constructorBasedDI-2" class="mine.spring.bean.di.ConstructorBasedDI">
+		<constructor-arg ref="depBeanB" />
+		<constructor-arg ref="depBeanA" />
+		<constructor-arg ref="sharedStringVal" />
+		<constructor-arg value="10" />
+		<constructor-arg value="100" />
+	</bean>
+
+
+	<!-- specify index/type/name arguments for simple parameters to avoid type ambiguities -->
+	<!-- ### Constructor argument TYPE matching -->
+	<bean id="constructorBasedDITypeMatch" class="mine.spring.bean.di.ConstructorBasedDI">
+		<constructor-arg ref="depBeanB" type="mine.spring.bean.di.DICollBeanB"/>
+		<constructor-arg ref="sharedStringVal" type="java.lang.String"/><!--java.lang.String or Sring or Str  -->
+		<constructor-arg ref="depBeanA" type="mine.spring.bean.di.DICollBeanA"/>
+		<constructor-arg value="100" type="long" />
+		<constructor-arg value="10" type="int" />
+	</bean>
+	
+	<!-- ### Constructor argument NAME matching -->
+	<bean id="constructorBasedDINameMatch" class="mine.spring.bean.di.ConstructorBasedDI">
+		<constructor-arg ref="depBeanB" name="depBeanB"/>
+		<constructor-arg ref="sharedStringVal" name="stringField"/>
+		<constructor-arg ref="depBeanA" name="depBeanA"/>
+		<constructor-arg value="100" name="longField"/>
+		<constructor-arg value="10" name="intField" />
+	</bean>
+	
+	<!-- ### Constructor argument INDEX matching (Index is 0 based) -->
+	<bean id="constructorBasedDIIndexMatch" class="mine.spring.bean.di.ConstructorBasedDI">
+		<constructor-arg ref="depBeanA" index="0"/>
+		<constructor-arg ref="sharedStringVal" index="2"/>
+		<constructor-arg ref="depBeanB" index="1"/>
+		<constructor-arg value="100" index="4"/>
+		<constructor-arg value="10" index="3" />
+	</bean>
+	
+	<bean id="constructorBasedDIMixedMatch" class="mine.spring.bean.di.ConstructorBasedDI">
+		<constructor-arg ref="depBeanB"/>
+		<constructor-arg value="SharedStringValue"/>
+		<constructor-arg ref="depBeanA"/>
+		<constructor-arg value="100" name="longField"/>
+		<constructor-arg value="10" type="int"/>
+	</bean>
+	
+	
+	<!-- ### Setter-based DI (for optional dependencies) -->
+	<!-- Setter-based DI is accomplished by the container calling setter methods on your beans after invoking a no-argument 
+		constructor or no-argument static factory method to instantiate your bean -->
+	<bean id="setterBasedDI" class="mine.spring.bean.di.SetterBasedDI">
+		<property name="depBeanA" ref="depBeanA" />
+		<property name="depBeanB" ref="depBeanB" />
+	</bean>
+	
+	<!-- ### Mixer of Constructor-based DI and Setter-based DI (invokes constructor and then calls mutators) -->
+	<bean id="constructorAndSetterDI" class="mine.spring.bean.di.ConstructorAndSetterDI">
+		<constructor-arg ref="depBeanB" />
+		<constructor-arg ref="depBeanA" />
+		<property name="stringField" value=""/>
+		<property name="intField" value="10" />
+		<property name="longField" value="100" />
+	</bean>
+
+	<bean id="sharedStringVal" class="java.lang.String">
+		<constructor-arg value="SharedStringValue"></constructor-arg>
+	</bean>
+	
+	<!-- Dependency Resolution Process:
+		1) ApplicationContext is created and initialized with configuration meta-data (in the form of XML, Annotations, or Java code).
+		2) For each bean, its dependencies are expressed in the form of properties, constructor-args, or static factory methods.
+			These dependencies are provided to the bean, when the bean is actually created.
+		3) Dependencies can be defined as straight values or reference to other managed beans.		
+		4) If it's a value, Spring converts a value supplied in String format to all the built-in types, such as boolean, int, long, float, String, etc.
+	 -->
+
+	<!-- Note: The Spring container validates the configuration of each bean as the container is created, including the validation 
+		of whether bean reference properties refer to valid beans. However, the bean properties themselves are not set until the 
+		bean is actually created. -->
+
+	<!-- Circular dependency -->
+	<!-- org.springframework.beans.factory.BeanCurrentlyInCreationException: Error creating bean with name 'circularDepbeanA': Requested bean is currently in creation: Is there an unresolvable circular reference? -->
+	<!-- <bean id="circularDepbeanA" class="mine.spring.bean.di.CircularDepBeanA">
+		<constructor-arg ref="circularDepbeanB"></constructor-arg>
+	</bean>
+	<bean id="circularDepbeanB" class="mine.spring.bean.di.CircularDepBeanB">
+		<constructor-arg ref="circularDepbeanA"></constructor-arg>
+	</bean> -->
+	
+	<!-- ### Straight values (primitives, Strings, and so on) -->
+	<!-- The value attribute of the <property/> or <constructor-arg/> element specifies a property or constructor argument as a human-readable string 
+		representation. JavaBeans PropertyEditors are used to convert from String to actual built-in types. -->
+	<bean id="straightValues"  name="builtinTypes" class="mine.spring.bean.di.ConstructorAndSetterDI">
+		<property name="stringField" value="StringValue"></property>
+		<property name="intField" value="10"></property>
+		<property name="longField" value="100"></property>
+	</bean>
+
+	<!-- ### Support for java.util.Properties: The Spring container converts the text inside the <value/> element into a java.util.Properties 
+		instance by using JavaBeans PropertyEditor mechanism -->
+	<bean id="straightValuesUsingProperties" class="mine.spring.bean.di.PropertyHolder">
+		<property name="properties">
+			<value>
+				stringField=StringValue
+				intField=10
+				longField=100
+			</value>
+		</property>
+	</bean>
+
+	<!-- ### idref element: allows the container to validate at deployment time that the referenced, named bean actually exists -->
+	<!-- The idref element is simple an error-proof way to pass the "id" (string value but not a reference) of another bean 
+		in the container to a <constructor-arg/> or <property/> element -->
+	<bean id="idrefElement" class="mine.spring.bean.di.ConstructorAndSetterDI">
+		<constructor-arg ref="depBeanB" />
+		<constructor-arg ref="depBeanA" />
+		<constructor-arg name="stringField">
+		<!-- Using "local" attribute: The value must be a bean ID/IDREF within the same bean definition XML file and thus can be 
+			checked by the XML parser. -->
+			<idref local="straightValues" />
+		<!-- <idref local="overviewBeanB" /> --> <!-- may throw an error as "overviewBeanB" is an id but not in this XML file -->
+		<!-- <idref local="builtinTypes"/> --> <!-- may throw an error as "builtinTypes" is name not an id --> 
+		</constructor-arg>
+		<constructor-arg name="intField" value="10"/>
+		<constructor-arg name="longField" value="100"/>
+		
+		<property name="stringField">
+		<!-- Using "bean" attribute: The value can be a bean id or name and not required to be in the same XML file -->
+			<idref bean="emptyBeanA" />
+		</property>
+	</bean>
+	
+	<!-- References to other beans (collaborators) -->
+	
+	<!-- ### ref element : References to other beans (collaborators) -->
+	<bean id="refElement" class="mine.spring.bean.di.ConstructorAndSetterDI">
+		<constructor-arg name="depBeanB">
+			<!-- Using "local" attribute: The value must be a bean ID/IDREF within the same bean definition XML file and thus can be 
+			checked by the XML parser. -->
+			<ref local="depBeanB" />
+		</constructor-arg>
+		<constructor-arg name="depBeanA">
+			<!-- Using "bean" attribute: The value can be a bean id or name and not required to be in the same XML file -->
+			<ref bean="depBeanA" />
+		</constructor-arg>
+		<constructor-arg name="stringField">
+			<!-- Using "parent" attribute: references the bean that is in the parent container of the current container. -->
+			<!-- Wraps an existing bean in a parent container with a proxy that will have the same name as the parent bean -->
+			<!-- <ref parent="straightValues" />  --><!-- Error: Can't resolve reference to bean 'straightValues' in parent factory: no parent factory available -->
+			<value>Un comment above line and check the behavior of "parent" attr</value>
+		</constructor-arg>
+		<constructor-arg name="intField" value="10"/>
+		<constructor-arg name="longField" value="100"/>
+	</bean>
+	
+	<!-- ### Inner beans -->
+	<!-- A <bean/> inside <property/> or <constructor/> element defines a so-called inner bean. -->
+	<bean id="innerBeansDemo" class="mine.spring.bean.di.ConstructorAndSetterDI">
+		<constructor-arg>
+		<bean id="IDNotRequiredAndIgnored" name="NameNotRequiredAndIgnored" class="mine.spring.bean.di.DICollBeanB" scope="ScopeNotReuiredAndIgnoredDefaultToPrototype">
+			<!-- An inner bean definition does not require a defined "id" or "name"; the container ignores these values. It also ignores 
+				the "scope" flag. Inner beans are always anonymous and they are always scoped as "prototype". It is not possible to inject inner 
+				beans into collaborating beans other than into the enclosing bean. -->
+		</bean> 
+		</constructor-arg>
+		<constructor-arg ref="depBeanA" />
+		<property name="stringField" value=""/>
+		<property name="intField" value="10" />
+		<property name="longField" value="100" />
+	</bean>
+	
+	<!-- ### Collections (List, Set, Map, and Properties) -->
+	<bean id="emptyCollection" class="mine.spring.bean.di.CollectionDI">
+		<property name="userProperties">
+			<props></props>
+		</property>
+		<property name="listOfObjs">
+			<list></list>
+		</property>
+		<property name="setOfObjs">
+			<set></set>
+		</property>
+		<property name="mapOfObjs">
+			<map></map>
+		</property>
+		<property name="stringArray">
+			<array></array>
+		</property>
+	</bean>
+	
+	<!-- Collections (List, Set, Map, and Properties) -->
+	<bean id="filledInCollection" class="mine.spring.bean.di.CollectionDI">
+		<property name="userProperties">
+			<props>
+				<prop key="prop1">prop-value1</prop> <!-- The string value of the property -->
+				<prop key="prop2"> leading/trailing white-spaces are trimmed </prop>
+				<prop key="prop3"/> <!-- empty string -->
+				<prop key="prop1">overwritten value of prop-value1</prop>
+			</props>
+		</property>
+		<property name="listOfObjs">
+			<!-- A list can contain multiple inner bean, ref, collection, or value elements. A list can also map to an array type; the 
+				necessary conversion is performed automatically -->
+			<list>
+				<value>List can have value</value>
+				<null/> <!-- accepts null -->
+				<ref bean="depBeanA"/> <!-- reference to another bean -->
+				<idref local="depBeanA"/> <!-- id reference to another bean -->
+				<bean class="mine.spring.bean.di.DICollBeanA"/> <!-- accepts inner bean -->
+				<array><value>arrayComponent1</value><value>arrayComponent2</value></array> <!-- can be an array -->
+				<set></set>
+				<map></map>
+				<list></list>
+				<props></props>
+			</list>
+		</property>
+		<property name="setOfObjs">
+			<!-- A set can contain multiple inner bean, ref, collection, or value elements -->
+			<set>
+				<value>Set accepts value</value>
+				<null/> <!-- accepts null -->
+				<ref bean="depBeanA"/> <!-- reference to another bean -->
+				<idref local="depBeanA"/> <!-- id reference to another bean -->
+				<bean class="mine.spring.bean.di.DICollBeanA"/> <!-- accepts inner bean -->
+				<array><value>arrayComponent1</value><value>arrayComponent2</value></array> <!-- can be an array -->
+				<set></set>
+				<map></map>
+				<list></list>
+				<props></props>
+			</set>
+		</property>
+		<property name="mapOfObjs">
+			<!-- A mapping from a key to an object. Maps may be empty -->
+			<map>
+				<entry key="String Inlined Key" value="String Inlined Value"/>  <!-- short-cut nested key and value -->
+				<entry>
+					<key>
+						<value>String Nested Key</value>
+					</key>
+					<value>String Nested Value</value>
+				</entry>
+				<entry key-ref="stringKeyRef" value-ref="stringValueRef"></entry> <!-- short-cut to "key" element with a nested "<ref bean='..."/> and nested <ref bean=".../> -->
+				<entry>
+					<key>
+						<ref bean="stringKeyRef"/>
+					</key>
+					<ref bean="stringValueRef"/>
+				</entry>
+				<entry>
+					<key>
+						<bean class="mine.spring.bean.di.DICollBeanA"/>
+					</key>
+						<bean class="mine.spring.bean.di.DICollBeanB"/>
+				</entry>
+				
+			</map>
+		</property>
+		<property name="stringArray">
+			<array value-type="java.lang.String">
+				<value>arrayComponent1</value>
+				<value>arrayComponent2</value>
+				<value>arrayComponent3</value>
+			</array>
+		</property>
+	</bean>
+	
+	<bean id="stringKeyRef" class="java.lang.String">
+		<constructor-arg value="Referenced String key"></constructor-arg>
+	</bean>
+	<bean id="stringValueRef" class="java.lang.String">
+		<constructor-arg value="Referenced String Value"></constructor-arg>
+	</bean>
+	
+	<!--  ### Collection merging/inheritance : with the help of parent-child bean mechanism -->
+	<!-- Merging can be applied on Java types: List, Set, Map, Properties, and Arrays too. -->
+	<!-- Set merge="true" on child's collection to enable merging -->
+	<!-- On merging, ordering is maintaind for List and Arrays but not for other collections -->
+	<!-- You cannot merge different collection types (such as a Map and a List) -->
+	<!-- The child collection's values are the result of merging the elements of the parent and child collections, with the 
+		child's collection elements overriding values specified in the parent collection. -->
+	<!-- You can use strongly typed collections (using generic types) -->
+	<bean id="collectionMergingParent" abstract="true" class="mine.spring.bean.di.CollectionDI">
+		<property name="mapOfObjs">
+			<map key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="parent key1" value="parent val1"/>
+				<entry key="parent key2" value="parent val2"/>
+				<entry key="parent key3" value="parent val3"/>
+			</map>
+		</property>
+		<property name="listOfObjs">
+			<list>
+				<value>pv1</value>
+				<value>pv2</value>
+				<value>pv3</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="collectionMergingChild" parent="collectionMergingParent" >
+		<property name="mapOfObjs">
+			<map merge="true"> <!-- merged with parent -->
+				<entry key="parent key3" value="child val3 replacing parent val3"/> <!-- child value overrides parent's value -->
+				<entry key="child key 1" value="child val1"/>
+				<entry key="child key 2" value="child val2"/>
+			</map>
+		</property>
+		<property name="listOfObjs"> 
+			<list> <!-- not merged with parent -->
+				<value>cv1</value>
+				<value>cv2</value>
+				<value>cv3</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- ### XML shortcut with p-namespace -->
+	<!-- p-namespace allows you to use the bean element's attributes, instead of nested <property/> elements, to set property 
+		straight value and reference to other bean -->
+	<!-- Add this xml namespace attr at <beans/>: xmlns:p="http://www.springframework.org/schema/p" -->
+	<!-- the p-namespace is not defined in an XSD file and exists only in the core of Spring -->
+	<!-- For straight values: set the name of the attribute to the property name with schema prefix. e.g.: use p:floatField 
+		attr for a property floatField -->
+	<!-- For bean references: set the name of the attribute to the property name with schema prefix and "-ref" suffix. e.g.: use p:objField 
+		attr for a property objField to refer another bean -->
+	<!-- A "-ref" part indicates that this is not a straight value but rather a reference to another bean -->
+	<bean id="p-Namespace" class="mine.spring.bean.di.DICollBeanA" p:floatField="10.01f" p:stringField="value" p:objField-ref="depBeanB"/>
+	<bean id="withoutP-Namespace" class="mine.spring.bean.di.DICollBeanA">
+		<property name="floatField" value="10.01f"/>
+		<property name="stringField" value="value"></property>
+		<property name="objField" ref="depBeanB"></property>
+	</bean>
+	
+	<!-- ### Compound/nested property names (outerField.innerField.deepInnerField) -->
+	<!-- Use compound/nested property names when when you set bean properties, as long as all components of the path except 
+		final property name are not null. Otherwise NPX will be thrown.-->
+	<bean id="compoundOrNestedProp" class="mine.spring.bean.di.CompoundPropertyClass">
+		<property name="class1Field">
+			<bean class="mine.spring.bean.di.CompoundPropertyClass1">
+				<property name="class2Field">
+					<bean class="mine.spring.bean.di.CompoundPropertyClass2"/>				
+				</property>
+			</bean>
+		</property>
+		<!-- setting compound/nested property -->
+		<property name="class1Field.class2Field.stringField" value="Setting compound/nested property names (class1Field.class2Field.stringField)" /> 
+	</bean>
+
+	<!-- ### depends-on : Instantiating indirectly dependent objects (collaborators used in static init block)  using "depends-on" attribute -->
+	<!-- The "depends-on" attribute can explicitly force one or more beans to be initialized before the bean using this element is initialized.  -->
+	<!-- To express a dependency on multiple beans, supply a list of bean names as value, delimited by commma, semicolon, or whitespace. -->
+	<!-- Beans that define a depends-on relationship with a given bean are destroyed first, prior to the given bean itself being 
+		destroyed. -->
+	<!-- depends-on can also control shutdown order -->
+	<!-- Initialization Order:  collBean1ForDependsOnBean, collBean2ForDependsOnBean, and finally dependsOnBean -->
+	<!-- Destruction Order:  dependsOnBean, collBean1ForDependsOnBean, and collBean2ForDependsOnBean  -->
+	<bean id="dependsOnBean" class="mine.spring.bean.di.CompoundPropertyClass" depends-on="collBean1ForDependsOnBean;collBean2ForDependsOnBean">
+	</bean>
+	<bean id="collBean1ForDependsOnBean" class="mine.spring.bean.di.CompoundPropertyClass1" />
+	<bean id="collBean2ForDependsOnBean" class="mine.spring.bean.di.CompoundPropertyClass2" />
+
+	<!-- ### Lazy-initialized beans (lazy-init="true" @ <bean/> or default-lazy-init="true" @ <beans/>) -->
+	<!-- A lazy-initialized bean tells the IoC container to create a bean instance when it is first requested, rather than on 
+		startup. -->
+	<!-- By default, ApplicationContext implementations eagerly create and configue all "singleton" beans as part of initialization 
+		process. -->
+	<!-- You cab prevent the pre-instantiation of a singleton bean by setting attribute lazy-init="true" on bean element. -->
+	<!-- When a lazy-initialized bean is a dependency of a singleton bean that is not lazy-initialized, the ApplicationContext 
+		creates the lazy-initialized bean at startup to satisfy the singleton bean's dependency. -->
+	<!-- Control lazy-initialization at the container level by using the "default-lazy-init" attribute on the <beans/> element -->
+
+	<bean id="lazyInitSingletonBean" class="mine.spring.bean.di.SingletonBean" lazy-init="true">
+		<constructor-arg value="Lazily on Demand/Request. Bean Name: lazyInitSingletonBean"/>
+	</bean>
+	<bean id="eagerInitSingletonBean" class="mine.spring.bean.di.SingletonBean">
+		<constructor-arg value="Eagerly on startup. Bean Name: eagerInitSingletonBean"/>
+		<property name="objField" ref="lazyInitSingletonBeanButDependencyOfSingletonBean" />
+	</bean>
+
+	<bean id="lazyInitSingletonBeanButDependencyOfSingletonBean" class="mine.spring.bean.di.SingletonBean" lazy-init="true">
+		<constructor-arg value="Eagerly on startup due to dependency. Bean Name: lazyInitSingletonBeanButDependencyOfSingletonBean"/>
+	</bean>
+
+	<!-- ### Auto-wiring collaborators -->
+	<import resource="spring-autowire.xml"/>
+
+	<!-- ### Method Injection (Singleton beans with prototype-bean dependencies) -->
+	<!-- What happens when a singleton bean (A) needs to collaborate with non-singleton bean (B)? The container creates the 
+		singleton bean A once, and thus only gets one opportunity to set the properties. But the container cannot provide bean A 
+		with a new instance of bean B every time one is needed.
+		
+		*) ApplicationContextAware/BeanFactoryAware: You can make bean A aware of the container by implementing the ApplicationContextAware 
+		(but it tightly couples Spring with application bean), hence not desirable.
+		
+		*) ServiceLocatorFactoryBean:
+		
+		*) ObjectFactoryCreatingFactoryBean:
+		
+		Spring provides advanced feature, Method Injection, to achieve the same.
+		1) Lookup method injection
+		2) Arbitary method replacement
+		 -->
+		
+	<!-- ### Implementing the ApplicationContextAware (Tightly couples Spring with application bean) -->
+	<!-- You can make bean A aware of the container by implementing the ApplicationContextAware interface, and by making a getBean("B") 
+		call to the container to ask for new bean B instance erverytime. -->
+	<bean id="singletonBeanAppCtxAware" class="mine.spring.bean.di.PrototypeBeanInjectionAppCtxAware">
+		<!-- <property name="prototypeBean" ref="prototypeBean"/> -->
+	</bean>
+	<bean id="prototypeBean" class="mine.spring.bean.di.PrototypeBean" scope="prototype"></bean>
+	
+	<!-- ### 1) Lookup method injection -->
+	<!-- The lookup method injection is the ability to override methods on container managed beans, to return the lookup result 
+		for another named bean in the container. -->
+	<!-- Requires additional library (cglib and asm) for dynamic subclassing of container managed bean. The generated subclass 
+		may override or implement the mathods on Container Managed Beans. -->
+	<!-- <bean id="prototypeBeanInjectionMethodInjection" class="mine.spring.bean.di.PrototypeBeanInjectionLookupMethod">
+		<lookup-method name="createPrototypeBean" bean="prototypeBean" />
+	</bean> -->
+	
+	<!-- ### 2) Arbitary method replacement -->
+	<!-- An ability to replace arbitary methods in a managed bean with another method implementation.  -->
+	<!-- The less used form of method injection than Lookup Method. -->
+	<!-- You can use <replaced-method/> element to replace an existing method implementation with another. -->
+	<!-- <bean id="prototypeBeanInjectionReplacedMethod" class="mine.spring.bean.di.PrototypeBeanInjectionReplacedMethod">
+		<replaced-method name="createPrototypeBean" replacer="methodReplacer"> -->
+			<!-- To indicate the signature of overloaded mothods or if multiple method variants exist. -->
+			<!-- <arg-type match="Str"></arg-type> -->
+		<!-- </replaced-method>
+	</bean>
+	<bean id="methodReplacer" class="mine.spring.bean.di.MyMethodReplacer"/> -->
+	
+</beans>

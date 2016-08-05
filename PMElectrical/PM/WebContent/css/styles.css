@@ -1,0 +1,44 @@
+.styleBody {
+	style: background :       url('/PM/css/images/bg.jpg');
+}
+
+.styleImg01 {
+	background: url('/PM/css/images/back_pic.gif');
+}
+
+.styleImg02 {
+	background: url('/PM/css/images/big_pic.jpg');
+}
+
+.style01 {
+	color: #990099;
+	font-family: "Lucida Calligraphy", "Lucida Handwriting",
+		"Monotype Corsiva";
+	font-size: x-large;
+}
+
+.style02 {
+	color: navy;
+	font: bold;
+}
+
+.style03 {
+	font-size: 14px;
+	color: #333333;
+	font-family: "Lucida Calligraphy", "Lucida Handwriting",
+		"Monotype Corsiva";
+}
+
+div.floating-block {
+	position: fixed;
+	right: 30px;
+	top: 0px;
+	background: #fff4c8;
+	width: 150px;
+	z-index: 100;
+}
+
+div.floating-block img {
+	display: block;
+	margin: 500 500em;
+}

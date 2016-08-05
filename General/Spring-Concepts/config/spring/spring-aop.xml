@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<!-- <aop:aspectj-autoproxy><aop:include/></aop:aspectj-autoproxy> -->
+	<!-- <bean id="myAspectBean" class="pkg.AspectBean"></bean>
+	<aop:config expose-proxy="false" proxy-target-class="false">
+		<aop:pointcut expression="joint point/pointcut designator(method name wildcard w/ or w/o)" id="myPointcut" />
+		<aop:advisor advice-ref="selfContainedAdvice" />
+		<aop:aspect id="myAspect" ref="myAspectBean" order="0"></aop:aspect>
+	</aop:config> -->
+	<!-- <tx:advice id="selfContainedAdvice">
+		<tx:attributes>
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice> -->
+	<!-- You will also need two AspectJ libraries on the classpath of your application: aspectjweaver.jar and aspectjrt.jar. 
+		These libraries are available in the 'lib' directory of an AspectJ installation (version 1.5.1 or later required), or in 
+		the 'lib/aspectj' directory of the Spring-with-dependencies distribution. -->
+	
+	
+	<!-- Terminology:
+	# AOP (Aspect Oriented programming: Program paradigm which complements OOP by providing alternate way of thinking about 
+		program structure.  
+	# Aspect: A modularization of cross-cutting concerns (concerns that cut across multiple classes).
+		e.g.: Transaction management aspect, Logging Aspect, Authentication Aspect, etc.
+	# Join point: A point  during the execution of a program.
+		e.g.: Execution of method/constructor, Handling of an exception, Initialization, setting, getting, arguments,
+				within, this, target, etc.
+	# Advice: An interceptor; Or an action taken by an aspect at a particular join point.
+		Types: Before, After returning, After throwing, After finally, and Around
+	# Pointcut: A predicate (an expression) that matches join points. An advice is associated with a pointcut expression
+				and runs at any join point mathed by the pointcut. Spring uses AspectJ's pointcut expression language by default.
+		e.g.: execution(public * methodName(String, *) throws Exception)
+	# Introduction (inter-type declaration): declaring additional fields, methods, or interface on behalf of a type.
+				Spring AOP allows you to introduce new interfaces to any advised object.
+		e.g.: Make a bean implement a Serializable interface, to serialize its objects.
+	# Target / Advised / Proxied object :   An object being advised by one or more aspects.
+	# AOP proxy: An object created by AOP (via JDK  dynamic proxy or CGLIB proxy) in order to implement the aspect contracts.
+	# Weaving:  Linking aspects and other application types or objects to create an advised object.
+	 -->	
+	 
+	 <!-- AOP Proxies: Spring AOP is proxy based, uses either JDK dynamic proxy (proxy by interface) or CGLIB proxy (proxy by subclassing).
+	  # JDK dynamic proxy (proxy by interface): Proxy class has to implement the interfaces of target class.
+	  # CGLIB proxy: Proxy class becomes a subclass of the target class.
+	  -->
+	 
+	<!-- ### Simple Aspect Configuration -->
+	
+	<!-- Service bean -->
+	<bean id="custService" class="mine.spring.aop.CustomerService"/>
+	
+	<!-- An aspect is simply a regular Java object defined as a bean -->
+	<bean id="myAspectBean" class="mine.spring.aop.schema.SimpleAspectBean"/>
+
+	<!-- AOP specific configuration: encapsulates point cut, aspect and advice; <aop:config> element can be occurred more than once 
+		in a context declaration. -->
+	<aop:config>
+		<!-- A common point-cut definition, can be used across several aspects and advisors. -->
+		<aop:pointcut id="myPointCut" expression="execution(* * (..))" />
+
+		<!-- An aspect definition: contains advice, private point-cut, interface introducer(declare-parents) definitions. -->
+		<aop:aspect id="myAspect" ref="myAspectBean">
+			<!-- An advice definition: specifies inline-point-cut, point-cut reference, method name, and argument names. -->
+			<aop:before pointcut-ref="myPointCut" method="beforeAdvice" />
+		</aop:aspect>
+	</aop:config>
+	
+	
+	<!-- ### Kinds of advice -->
+	<!-- 1) Before Advice : A concern to be executed before a join point but couldn't prevent execution flow proceeding to the join point. -->
+	<!-- 2) After Returning Advice: A concern to be executed after a join point completes normally, without throwing an exception. -->
+	<!-- 3) After Throwing Advice: A concern to be executed after a join point completes abnormally by throwing an exception. -->
+	<!-- 4) After Finally Advice: A concern to be executed after a join point completes normally or abnormally. -->
+	<!-- 5) Around Advice: Surrounds a join point (e.g.: method invocation). Most used powerful advice can perform custom behavior advice. -->
+	<aop:config>
+		<aop:pointcut id="myPointCutForAdvice1" expression="execution(public Integer mine.spring.aop.CustomerService.*(..))" />
+		<aop:aspect id="myAspectForAdvice1" ref="myAspectBean">
+			<aop:before pointcut-ref="myPointCutForAdvice1" method="beforeAdvice" />
+			<aop:after-returning pointcut-ref="myPointCutForAdvice1" method="afterReturningAdvice"/>
+			<aop:after-throwing pointcut-ref="myPointCutForAdvice1" method="afterThrowingAdvice"/>
+			<aop:after pointcut-ref="myPointCutForAdvice1" method="afterFinallyAdvice"/>
+			<aop:around pointcut-ref="myPointCutForAdvice1" method="aroundAdvice"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<aop:config>
+		<aop:pointcut id="myPointCutForAdvice2" expression="execution(public * mine.spring.aop.CustomerService.enquireCustmer(String))" />
+		<aop:aspect id="myAspectForAdvice2" ref="myAspectBean">
+			<aop:after-returning pointcut-ref="myPointCutForAdvice2" method="afterReturningAdviceWithArg" returning="retVal"/>
+			<aop:after-throwing pointcut-ref="myPointCutForAdvice2" method="afterThrowingAdviceWithArg" throwing="exceptionObj" />
+		</aop:aspect>
+	</aop:config>
+	
+	
+	<!-- ### Point cut designators -->
+	<!-- execution(modifiers-pattern? ret-type-pattern declaring-type-pattern? name-pattern(param-pattern) throws-pattern?) -->
+	<aop:config>
+		<aop:pointcut id="pointcutPCD1" expression="args(String)" />
+		<aop:aspect id="aspectPCD1" ref="myAspectBean">
+			<aop:after pointcut-ref="pointcutPCD1" method="afterFinallyAdviceWithArg" arg-names="String"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- ### Introduction/inter-type declaration (declare-parents) -->
+	<!-- Enables an aspect to declare that the advised objects implement a given interface; provides default implementation 
+		of that interface too. -->
+	<!-- The declare-parents element allows an aspect to introduce additional interfaces that the advised object will transparently 
+		implement. -->
+	<aop:config>
+		<aop:aspect id="aspectIntroduction1" ref="myAspectBean">
+			<aop:declare-parents types-matching="mine.spring.bean.*" implement-interface="java.io.Serializable" default-impl="mine.spring.bean.BeanA"/>
+			<aop:before pointcut="execution(public * mine.spring.aop.CustomerService.enquireCustmer(String))" method="beforeAdvice" />
+		</aop:aspect>
+	</aop:config>
+	
+	<!-- ### Advisor -->
+	<!-- An advisor is like a small self-contained aspect that has a single piece of advice. The advice itself is represented 
+		by a bean, and must implement one of the predefined advice interfaces. -->
+	<!-- <aop:config>
+		<aop:pointcut id="pointcutAdvisor" expression="execution(public * mine.spring.aop.CustomerService.*(String))" />
+		<aop:advisor advice-ref="myAdvice" pointcut-ref="pointcutAdvisor" />
+	</aop:config>
+	<tx:advice id="myAdvice">
+		<tx:attributes>
+			<tx:method name="create*" propagation="REQUIRED"/>
+		</tx:attributes>
+	</tx:advice>
+	 -->
+	<!-- ### Aspect instantiation models -->
+	
+</beans>

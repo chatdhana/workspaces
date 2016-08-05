@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+		<include file="struts-default.xml"/>
+		<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+		<constant name="struts.devMode" value="true" />
+		
+	    <package name="default" extends="struts-default">       
+	        
+	            <action name="recruiterregister" class="com.virtusa.placement.controller.RecruiterData">
+	            <result name="input" >RecruiterForm.jsp</result>
+	             <result name="error" >RecruiterForm.jsp</result>
+	             <result>RecruiterRegistered.jsp</result>
+	             </action>
+	              
+	            <action name="seekerregister" class="com.virtusa.placement.controller.SeekerData">
+	            <result name="input" >SeekerForm.jsp</result>
+	             <result name="error" >SeekerForm.jsp</result>
+	             <result name="invalid">SeekerForm.jsp</result>
+	             <result>SeekerProfile.jsp</result>
+	             </action>
+	             
+	             <action name="loginseeker" class="com.virtusa.placement.controller.VerifySeekerLogin">
+	            <result name="input" >Jobseeker.jsp</result>
+	             <result name="error" >Jobseeker.jsp</result>
+	             <result>SeekerLogin.jsp</result>
+	             </action>
+	            
+	            <action name="loginrecruiter" class="com.virtusa.placement.controller.VerifyRecruiterLogin">
+	            <result name="input" >Recruiter.jsp</result>
+	             <result name="error" >Recruiter.jsp</result>
+	             <result>RecruiterLogin.jsp</result>
+	             </action>
+	             
+	              <action name="seekerprofile" class="com.virtusa.placement.controller.SeekerProfileData">
+	            <result name="input" >SeekerProfile.jsp</result>
+	             <result name="error" >SeekerProfile.jsp</result>
+	             <result>SeekerRegistered.jsp</result>
+	             </action>  
+	             
+	              <action name="toupdaterecruiter" class="com.virtusa.placement.controller.ViewRecruiter">
+	               <result>UpdateRecruiter.jsp</result>
+	             </action>
+	             
+	             <action name="updatedrecruiterdata" class="com.virtusa.placement.controller.UpdateRecruiter">
+	               <result>UpdateRecruiterSuccess.jsp</result>
+	             </action> 
+	            
+	              <action name="toupdateseeker" class="com.virtusa.placement.controller.ViewSeeker">
+	               <result name="success">UpdateSeekerForm.jsp</result>
+	               <result name="error">error.jsp</result>
+	             </action>
+	             <action name="updateseekerpersonal" class="com.virtusa.placement.controller.ViewSeekerProfile">
+	                 <result name="success">UpdateSeekerProfile.jsp</result>
+	                 <result name="error">error.jsp</result>
+	           	</action>
+	             
+	               <action name="updateseekerprofile" class="com.virtusa.placement.controller.UpdateSeekerProfile">
+	               <result name="input">UpdateSeekerProfile.jsp</result> 
+	               <result name="success">UpdateSeekerSuccess.jsp</result> 
+	             </action>
+	              
+	              <action name="checknameavailable" class="com.virtusa.placement.controller.CheckNameAvailability">
+  	   				<result name="success">CheckNameAvailability.jsp</result>
+  	   			</action>
+	        
+	        
+	        
+	        
+	 <!-- Seeker Apply Job -->       
+	        
+	        
+	        
+	        <action name="applyJobHome" class="com.virtusa.placement.controller.ApplyJobHome">
+	      <result name="success">/applyJobHome.jsp</result>
+	      <result name="error">error.jsp</result>
+	     </action>
+	       
+	     <action name="maxSalAjax" class="com.virtusa.placement.controller.MaxSalAjax">
+	     <result name="success">maxSalChooser.jsp</result>
+	      <result name="error">error.jsp</result>
+	     </action>
+	     
+	     <action name="searchJob" class ="com.virtusa.placement.controller.SearchJobSeek">
+	     <result name="success">displayJobs.jsp</result>
+	     <result name="error">errorPage.jsp</result>
+	     
+  	     
+  	     </action>
+  	     <action name="applyJob" class="com.virtusa.placement.controller.ApplyJobSeek">
+  	     <result name="success">applyJobSuccess.jsp</result>
+  	     <result name="error">errorPage.jsp</result>
+  	     </action>
+  	     
+  	     
+  	   <!--  Recruiter Post Job --> 
+  	     
+  	     <action name="postJobHome" class="com.virtusa.placement.controller.PostJobHome">
+  	   	<result >postJobHome.jsp</result>
+  	   	</action>  
+  	   	<action name="maxExpChooserRec" class="com.virtusa.placement.controller.MaxExpChooserRec">
+  	   	<result name="success">maxExpChooserRec.jsp</result>
+  	   	</action>
+  	     
+  	    <action name="postJob" class="com.virtusa.placement.controller.PostJobRec">
+  	    <result name="success">Payment.jsp</result>
+  	    <result name="error">error.jsp</result>
+  	    </action>
+  	     
+  	     <action name="changepassword" class="com.virtusa.placement.controller.ChangePassword">
+  	    <result name="success">ChangePasswordSuccess.jsp</result>
+  	    <result name="error">error.jsp</result>
+  	    <result name="expiry">expiry.jsp</result>
+  	    </action>
+  	    <action name="logout" class="com.virtusa.placement.controller.LogOut">
+  	    <result>logout2.jsp</result>
+  	    </action>
+  	   
+  	     
+  		<action name="onlineTest" class="com.virtusa.placement.controller.TestID">
+  		<result name="success" type="redirect">http://10.5.80.138/onlinetest1/start.aspx</result>
+  		<result name="error">error.jsp</result>
+  		</action>
+  		
+  		<action name="viewresume" class="com.virtusa.placement.controller.ViewResume">
+  	    <result>ViewResume.jsp</result>
+  	    </action>
+  	           
+	        
+        </package>		
+
+       
+</struts>
+

@@ -1,0 +1,51 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<createCustomer xmlns="http://ws.mine">
+			<cust>
+				<ns1:aadhaarId xmlns:ns1="http://bean.mine">1234567890</ns1:aadhaarId>
+				<ns2:annualIncome xmlns:ns2="http://bean.mine">1200000
+				</ns2:annualIncome>
+				<ns3:countryOfBirth xmlns:ns3="http://bean.mine">IN
+				</ns3:countryOfBirth>
+				<ns4:dob xmlns:ns4="http://bean.mine">1987-01-27T07:12:12.625Z</ns4:dob>
+				<ns5:name xmlns:ns5="http://bean.mine">Dhananjayan</ns5:name>
+			</cust>
+		</createCustomer>
+	</soapenv:Body>
+</soapenv:Envelope>
+
+
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Body>
+		<createCustomer xmlns="http://ws.mine">
+			<cust>
+				<ns1:aadhaarId xmlns:ns1="http://bean.mine">1234567890</ns1:aadhaarId>
+				<ns2:annualIncome xmlns:ns2="http://bean.mine">1200000
+				</ns2:annualIncome>
+				<ns3:countryOfBirth xmlns:ns3="http://bean.mine">IN
+				</ns3:countryOfBirth>
+				<ns4:dob xmlns:ns4="http://bean.mine">2013-12-05T07:14:03.044Z</ns4:dob>
+				<ns5:name xmlns:ns5="http://bean.mine">Dhananjayan</ns5:name>
+			</cust>
+		</createCustomer>
+	</soapenv:Body>
+</soapenv:Envelope>
+
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Header>
+		<ns1:HeaderElement soapenv:actor="http://schemas.xmlsoap.org/soap/actor/next"
+			soapenv:mustUnderstand="0" xmlns:ns1="ns:nameSpace">Value</ns1:HeaderElement>
+	</soapenv:Header>
+	<soapenv:Body>
+		<findByAadhaarId xmlns="http://ws.mine">
+			<aadhaarId>Using Service Locator</aadhaarId>
+		</findByAadhaarId>
+	</soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" 
+
+"http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+
+<validators>
+
+<field name="username">
+<field-validator type="requiredstring">
+<message>User name required</message>
+</field-validator>
+</field>
+<!--  
+<field name="password2">
+<field-validator type="required">
+<message>Password required...</message>
+</field-validator>
+<field-validator type="stringlength">
+<param name="trim">true</param>
+<param name="minLength">6</param>
+<param name="maxLength">15</param>
+<message>
+Password length is not in the range of 6 and 15.
+</message>
+</field-validator>
+</field>
+
+<field name="password">
+<field-validator type="required">
+<message>Password required...</message>
+</field-validator>
+<field-validator type="stringlength">
+<param name="trim">true</param>
+<param name="minLength">6</param>
+<param name="maxLength">15</param>
+<message>
+Password length is not in the range of 6 and 15.
+</message>
+</field-validator>
+</field>
+-->
+
+
+<field name="company_name">
+<field-validator type="requiredstring">
+<message>Company name required</message>
+</field-validator> 
+<field-validator type="regex"> 
+<param name="expression">[a-zA-Z]{1,30}</param>
+<message>Enter proper company name</message>
+</field-validator> 
+</field>
+
+
+
+
+
+
+<field name="contactperson_name">
+<field-validator type="requiredstring">
+<message>Contact Person name required</message>
+</field-validator> 
+<field-validator type="regex"> 
+<param name="expression">[a-zA-Z]{1,30}</param>
+<message>Enter proper contact person name</message>
+</field-validator> 
+</field>
+
+
+
+
+<field name="contactperson_empid">
+<field-validator type="required">
+<message>Emp-id required</message>
+</field-validator> 
+<field-validator type="regex">
+<param name="expression">[a-zA-Z0-9]{1,15}</param>
+<message>Enter a valid email id</message>
+</field-validator>
+</field>
+
+
+
+
+
+
+
+
+<field name="contactaddress">
+<field-validator type="required">
+<message>Contact address required</message>
+</field-validator>
+</field>
+
+
+
+
+
+
+
+
+
+<field name="phone">
+
+<field-validator type="regex">
+
+<param name="expression">[0-9]{1,12}</param>
+
+<message>Enter a valid landline number</message>
+
+</field-validator>
+
+</field>
+
+
+
+
+
+
+
+
+<field name="mobile">
+
+<field-validator type="regex">
+
+<param name="expression">[0-9]{1,12}</param>
+
+<message>Enter a valid mobile number</message>
+
+</field-validator>
+
+</field>
+
+
+
+
+
+
+<field name="email">
+
+<field-validator type="required">
+
+<message>Email id required</message>
+
+</field-validator> 
+
+<field-validator type="email">
+
+<message>Enter a valid email id</message>
+
+</field-validator>
+
+</field>
+
+
+</validators>
+
+
+
+

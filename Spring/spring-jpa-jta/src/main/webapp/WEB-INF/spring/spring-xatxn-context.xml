@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:repository="http://www.springframework.org/schema/data/repository"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.3.xsd
+	http://www.springframework.org/schema/data/repository http://www.springframework.org/schema/data/repository/spring-repository.xsd">
+
+	<context:component-scan base-package="mine.sample.jta.controller, mine.sample.jta.service" />
+	<mvc:annotation-driven />
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<jpa:repositories base-package="mine.sample.jta.repository" transaction-manager-ref="transactionManager"
+		entity-manager-factory-ref="entityManagerFactory-1">
+		<repository:include-filter type="regex" expression="mine.sample.jta.repository.XaTransactionRepo1" />
+	</jpa:repositories>
+
+	<jpa:repositories base-package="mine.sample.jta.repository" transaction-manager-ref="transactionManager"
+		entity-manager-factory-ref="entityManagerFactory-2">
+		<repository:include-filter type="regex" expression="mine.sample.jta.repository.XaTransactionRepo2" />
+	</jpa:repositories>
+
+	<bean id="atomikosTxnManager" class="com.atomikos.icatch.jta.UserTransactionManager" init-method="init"
+		destroy-method="close">
+		<property name="forceShutdown" value="false" />
+	</bean>
+	<bean id="atomikosUserTxn" class="com.atomikos.icatch.jta.J2eeUserTransaction">
+		<property name="transactionTimeout" value="120" />
+	</bean>
+	<bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager" ref="atomikosTxnManager" />
+		<property name="userTransaction" ref="atomikosUserTxn" />
+	</bean>
+
+	<bean id="entityManagerFactory-1" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="Persistence Unit 1" />
+		<property name="packagesToScan" value="mine.sample.jta.entity" />
+		<property name="dataSource" ref="xaDataSource-1" />
+		<property name="jpaProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.DerbyTenSevenDialect
+				hibernate.hbm2ddl.auto=update
+				hibernate.show_sql=true
+				hibernate.transaction.flush_before_completion=true
+				hibernate.connection.release_mode=auto
+				hibernate.connection.autocommit=false
+				hibernate.transaction.manager_lookup_class=com.atomikos.icatch.jta.hibernate3.TransactionManagerLookup
+				hibernate.transaction.factory_class=org.hibernate.engine.transaction.internal.jta.CMTTransactionFactory
+				hibernate.current_session_context_class=jta
+				hibernate.transaction.jta.platform=mine.sample.jta.service.AtomikosJtaPlatform
+			</value>
+		</property>
+		<!-- hibernate.transaction.factory_class=com.atomikos.icatch.jta.hibernate3.AtomikosJTATransactionFactory hibernate.transaction.jta.platform=mine.sample.jta.service.AtomikosJtaPlatform -->
+
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="entityManagerFactory-2" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="Persistence Unit 2" />
+		<property name="packagesToScan" value="mine.sample.jta.entity" />
+		<property name="dataSource" ref="xaDataSource-2" />
+		<property name="jpaProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.DerbyTenSevenDialect
+				hibernate.hbm2ddl.auto=update
+				hibernate.show_sql=true
+				hibernate.transaction.flush_before_completion=true
+				hibernate.connection.release_mode=auto
+				hibernate.connection.autocommit=false
+				hibernate.transaction.manager_lookup_class=com.atomikos.icatch.jta.hibernate3.TransactionManagerLookup
+				hibernate.transaction.factory_class=org.hibernate.engine.transaction.internal.jta.CMTTransactionFactory
+				hibernate.current_session_context_class=jta
+				hibernate.transaction.jta.platform=mine.sample.jta.service.AtomikosJtaPlatform
+			</value>
+		</property>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="xaDataSource-1" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="Data Source - 1" />
+		<property name="xaDataSourceClassName" value="org.apache.derby.jdbc.ClientXADataSource" />
+		<property name="maxPoolSize" value="50" />
+		<property name="xaProperties">
+			<props>
+				<prop key="user">myjtadbuser</prop>
+				<prop key="password">myjtadbuser</prop>
+				<prop key="databaseName">MyDB</prop>
+				<prop key="serverName">localhost</prop>
+				<prop key="portNumber">1527</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="xaDataSource-2" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="Data Source - 2" />
+		<property name="xaDataSourceClassName" value="org.apache.derby.jdbc.ClientXADataSource" />
+		<property name="maxPoolSize" value="50" />
+		<property name="xaProperties">
+			<props>
+				<prop key="user">myjtadbuser</prop>
+				<prop key="password">myjtadbuser</prop>
+				<prop key="databaseName">MyDB</prop>
+				<prop key="serverName">localhost</prop>
+				<prop key="portNumber">1527</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Hibernate JTA Platform for Atomikos -->
+	<bean class="mine.sample.jta.support.AtomikosJtaPlatform">
+		<property name="jtaTransactionManager" ref="transactionManager" />
+	</bean>
+</beans>

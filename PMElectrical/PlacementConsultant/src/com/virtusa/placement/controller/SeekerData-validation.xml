@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" 
+
+"http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+
+<validators>
+
+<field name="username">
+<field-validator type="required">
+<message>User name required</message>
+</field-validator>
+</field>
+
+
+
+<field name="password">
+
+<field-validator type="requiredstring">
+
+<message>Password required</message>
+
+</field-validator>
+
+<field-validator type="stringlength">
+
+<param name="trim">true</param>
+
+<param name="minLength">6</param>
+
+<param name="maxLength">20</param>
+
+<message>
+
+Password length is not in the range of 6 and 20.
+
+</message>
+
+</field-validator>
+
+</field>
+
+
+
+
+
+
+
+
+<field name="first_name">
+
+<field-validator type="requiredstring">
+
+<message>First name required</message>
+
+</field-validator> 
+
+<field-validator type="regex"> 
+
+<param name="expression">[a-zA-Z]{1,30}</param>
+
+<message>Enter proper first name</message>
+
+</field-validator> 
+
+</field>
+
+
+
+
+
+
+<field name="last_name">
+
+<field-validator type="requiredstring">
+
+<message>Last name required</message>
+
+</field-validator> 
+
+<field-validator type="regex"> 
+
+<param name="expression">[a-zA-Z]{1,30}</param>
+
+<message>Enter proper last name</message>
+
+</field-validator> 
+
+</field>
+
+
+
+
+
+
+
+
+
+<field name="email">
+
+<field-validator type="requiredstring">
+
+<message>First name required</message>
+
+</field-validator> 
+
+<field-validator type="email">
+
+<message>Enter a valid email id</message>
+
+</field-validator>
+
+</field>
+
+
+
+
+
+
+
+
+<field name="contact_address">
+
+<field-validator type="required">
+
+<message>Contact address required</message>
+
+</field-validator>
+
+</field>
+
+
+
+
+
+
+<field name="zip">
+
+<field-validator type="requiredstring">
+
+<message>zip required</message>
+
+</field-validator>
+
+<field-validator type="regex">
+
+<param name="expression">[0-9]{6}</param>
+
+<message>Enter a valid zip number</message>
+
+</field-validator>
+
+</field>
+
+
+
+
+
+
+<field name="landline">
+
+<field-validator type="regex">
+
+<param name="expression">[0-9]{10,15}</param>
+
+<message>Enter a valid landline number)</message>
+
+</field-validator>
+
+</field>
+
+
+
+
+
+
+
+
+<field name="mobile">
+<field-validator type="required">
+<message>Mobile number required</message>
+
+</field-validator>
+<field-validator type="regex">
+
+<param name="expression">(9[0-9]*)+{10,15}</param>
+
+<message>Enter a valid mobile number  (e.g:9994783317)</message>
+
+</field-validator>
+
+</field>
+
+
+</validators>
+
+
+
+

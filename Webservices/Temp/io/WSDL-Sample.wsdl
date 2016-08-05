@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws.mine" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.mine"
+	xmlns:intf="http://ws.mine" xmlns:tns1="http://bean.mine" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<schema elementFormDefault="qualified" targetNamespace="http://ws.mine" xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://bean.mine" />
+			<element name="findByAadhaarId">
+				<complexType>
+					<sequence>
+						<element name="aadhaarId" type="xsd:string" />
+					</sequence>
+				</complexType>
+			</element>
+			<element name="findByAadhaarIdResponse">
+				<complexType>
+					<sequence>
+						<element name="findByAadhaarIdReturn" type="tns1:Customer" />
+					</sequence>
+				</complexType>
+			</element>
+		</schema>
+		<schema elementFormDefault="qualified" targetNamespace="http://bean.mine" xmlns="http://www.w3.org/2001/XMLSchema">
+			<complexType name="Customer">
+				<sequence>
+					<element name="aadhaarId" nillable="true" type="xsd:string" />
+					<element name="annualIncome" nillable="true" type="xsd:long" />
+					<element name="countryOfBirth" nillable="true" type="xsd:string" />
+					<element name="dob" nillable="true" type="xsd:dateTime" />
+					<element name="name" nillable="true" type="xsd:string" />
+				</sequence>
+			</complexType>
+		</schema>
+	</wsdl:types>
+
+	<wsdl:message name="findByAadhaarIdResponse">
+		<wsdl:part element="impl:findByAadhaarIdResponse" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="findByAadhaarIdRequest">
+		<wsdl:part element="impl:findByAadhaarId" name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+
+
+	<wsdl:portType name="CustomerSrv">
+		<wsdl:operation name="findByAadhaarId">
+			<wsdl:input message="impl:findByAadhaarIdRequest" name="findByAadhaarIdRequest"></wsdl:input>
+			<wsdl:output message="impl:findByAadhaarIdResponse" name="findByAadhaarIdResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="CustomerSrvSoapBinding" type="impl:CustomerSrv">
+		<wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="findByAadhaarId">
+			<wsdlsoap:operation soapAction="" />
+			<wsdl:input name="findByAadhaarIdRequest">
+				<wsdlsoap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="findByAadhaarIdResponse">
+				<wsdlsoap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="CustomerSrvService">
+		<wsdl:port binding="impl:CustomerSrvSoapBinding" name="CustomerSrv">
+			<wsdlsoap:address location="http://localhost:8080/JAXWS/services/CustomerSrv" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>

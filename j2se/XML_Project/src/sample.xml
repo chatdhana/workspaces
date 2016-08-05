@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<atlasMessage>
+	<header>
+		<messageId>400531822</messageId>
+		<action>U</action>
+		<sourceSystem>ATLAS</sourceSystem>
+		<environment>london</environment>
+		<messageType>LE_GM_ALL</messageType>
+	</header>
+	<leId>400088717</leId>
+	<leInfo>
+		<ultParentLeId>400088717</ultParentLeId>
+		<parentLeId>400088717</parentLeId>
+		<domicileCntry>RU</domicileCntry>
+		<ultRiskCntry>RU</ultRiskCntry>
+		<ultRiskCntryDesc>RUSSIAN FEDERATION</ultRiskCntryDesc>
+		<atlasCode>PROBUSINESSBANKS*MOW</atlasCode>
+		<leName>PROBUSINESSBANK MOW</leName>
+		<leLegalName>PROBUSINESSBANK</leLegalName>
+		<leLegalName1>null</leLegalName1>
+		<leStatusCode>ACTIVE</leStatusCode>
+		<leStatusCodeDesc>Active</leStatusCodeDesc>
+		<finInstType>BANK</finInstType>
+		<finInstTypeDesc>Unknown</finInstTypeDesc>
+		<leClassCode>BK</leClassCode>
+		<leClassCodeDesc>BANKS</leClassCodeDesc>
+		<scbLeInd>N</scbLeInd>
+		<hierarchyType>GRPHEAD</hierarchyType>
+		<hierarchyTypeDesc>Group Head</hierarchyTypeDesc>
+		<isicCode>8123</isicCode>
+		<isicCodeDesc>COMMERCIAL BANKS - FOREIGN</isicCodeDesc>
+		<instSector>320</instSector>
+		<instSectorDesc>Other Incorporated Companies</instSectorDesc>
+		<leLangCode>ENGLISH</leLangCode>
+		<leLangCodeDesc>English</leLangCodeDesc>
+		<dataProtInd>N</dataProtInd>
+		<norDeclInd>N</norDeclInd>
+		<trdInd>Y</trdInd>
+		<glbLimitInd>GLBLMT</glbLimitInd>
+		<brokerId>null</brokerId>
+		<disclosureAgrInd>N</disclosureAgrInd>
+		<docComplInd>N</docComplInd>
+		<docComplDate />
+		<leNote>null</leNote>
+		<confReqInd>N</confReqInd>
+		<scbCreditGrade>6B</scbCreditGrade>
+		<scbCreditGradeDesc>6B</scbCreditGradeDesc>
+		<topBankInd>N</topBankInd>
+		<leType>BANK</leType>
+		<leTypeDesc>BANK test</leTypeDesc>
+		<euroCompInd>Y</euroCompInd>
+		<activateInd>Y</activateInd>
+		<clsEigibility>N</clsEigibility>
+		<clsCustType>null</clsCustType>
+		<clsStartDate />
+		<groupCoType>99</groupCoType>
+		<cruser>gsenthil</cruser>
+		<crdate>2009-06-25T05:38:07:0Z</crdate>
+		<upcount>3</upcount>
+		<updstatus>U</updstatus>
+		<upddate>2009-06-25T05:38:07:0Z</upddate>
+		<upduser>geetha</upduser>
+		<verified>T</verified>
+		<verifieduser>kjacob</verifieduser>
+		<verifydate>2009-06-25T05:38:07:0Z</verifydate>
+		<bisWeighting>100</bisWeighting>
+		<disclAgrDate>2009-06-25T05:38:07:0Z</disclAgrDate>
+		<dvpCustIndicator>0</dvpCustIndicator>
+		<opicsClassCode>999</opicsClassCode>
+	</leInfo>
+	<leSysContact>
+		<mediumCode>SWIFT</mediumCode>
+		<mediumCodeDesc>SWIFT CODE</mediumCodeDesc>
+		<mediumUsage>MAIN</mediumUsage>
+		<mediumUsageDesc>Main</mediumUsageDesc>
+		<addrLine>PRBMRUMMXXXXXXXX</addrLine>
+		<leSysConId>23867</leSysConId>
+		<confirmationText>null</confirmationText>
+		<description>null</description>
+		<updstatus>N</updstatus>
+		<verified>Y</verified>
+	</leSysContact>
+	<leTcId>
+		<tcIdCode>PROB</tcIdCode>
+		<status>ACTIVE</status>
+		<statusDesc>Active</statusDesc>
+		<updstatus>N</updstatus>
+		<verified>Y</verified>
+	</leTcId>
+	<leAddress>
+		<leAddrId>614141</leAddrId>
+		<addrType>CONF</addrType>
+		<addrTypeDesc>Confirmation</addrTypeDesc>
+		<startDate>2009-09-14 00:00:00.0</startDate>
+		<countryIsoCode>RU</countryIsoCode>
+		<countryName>RUSSIAN FEDERATION</countryName>
+		<cityCode>VOK</cityCode>
+		<cityName>VLADIVOSTOK</cityName>
+		<addrLine1>1 NEVER STREET</addrLine1>
+		<addrLine2>null</addrLine2>
+		<postCode>null</postCode>
+		<state>null</state>
+		<contRole>null</contRole>
+		<altName>null</altName>
+		<title>null</title>
+		<contFirstName>null</contFirstName>
+		<contLastName>null</contLastName>
+		<contFax>null</contFax>
+		<contEmail>null</contEmail>
+		<contPhone>null</contPhone>
+		<contTelex>null</contTelex>
+		<description>null</description>
+		<updstatus>I</updstatus>
+		<verified>T</verified>
+	</leAddress>
+	<counterpartyXref>
+		<partyXrefCode>PROBUSINESSBANKS*MOW</partyXrefCode>
+		<locationCode>FRA</locationCode>
+		<extrnlSystmCode>FEDS</extrnlSystmCode>
+		<immsMnemonic>null</immsMnemonic>
+		<upcount>1</upcount>
+		<updstatus>I</updstatus>
+		<verified>T</verified>
+	</counterpartyXref>
+	<armLeCrf>
+		<armCrfId>113935</armCrfId>
+		<armCode>XXX</armCode>
+		<armCrfStatus>A</armCrfStatus>
+		<updstatus>N</updstatus>
+		<verified>Y</verified>
+	</armLeCrf>
+	<leBranchDetails>
+		<leBranchInfo />
+	</leBranchDetails>
+</atlasMessage>

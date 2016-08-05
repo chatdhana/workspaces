@@ -1,0 +1,63 @@
+
+	<!-- SOAP Request -->
+	<?xml version="1.0" encoding="UTF-8"?>
+	<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<soapenv:Header>
+			<ns1:HeaderElement soapenv:actor="http://schemas.xmlsoap.org/soap/actor/next"
+				soapenv:mustUnderstand="0" xmlns:ns1="ns:nameSpace">Value</ns1:HeaderElement>
+		</soapenv:Header>
+		<soapenv:Body>
+			<findByAadhaarId xmlns="http://ws.mine">
+				<aadhaarId>Using Service Locator</aadhaarId>
+			</findByAadhaarId>
+		</soapenv:Body>
+	</soapenv:Envelope>
+	
+	<!-- SOAP Response -->
+	<?xml version="1.0" encoding="UTF-8"?>
+	<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<soapenv:Body>
+			<findByAadhaarIdResponse xmlns="http://ws.mine">
+				<findByAadhaarIdReturn>
+					<aadhaarId>Using Service Locator</aadhaarId>
+					<annualIncome xsi:nil="true" />
+					<countryOfBirth>IN</countryOfBirth>
+					<dob xsi:nil="true" />
+					<name>Name-Using Service Locator</name>
+				</findByAadhaarIdReturn>
+			</findByAadhaarIdResponse>
+		</soapenv:Body>
+	</soapenv:Envelope>
+
+
+
+
+
+	<!-- SOAP Request -->
+	<?xml version="1.0" encoding="UTF-8"?>
+	<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<soapenv:Body>
+			<findByAadhaarId xmlns="http://ws.mine">
+				<aadhaarId>Using Service Locator</aadhaarId>
+			</findByAadhaarId>
+		</soapenv:Body>
+	</soapenv:Envelope>
+	
+	<!-- SOAP Response -->
+	<?xml version="1.0" encoding="utf-8"?>
+	<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<soapenv:Body>
+			<soapenv:Fault>
+				<faultcode>soapenv:Server.userException</faultcode>
+				<faultstring>java.io.FileNotFoundException: c:\logs\axis.log (The
+					system cannot find the path specified)</faultstring>
+				<detail>
+					<ns1:hostname xmlns:ns1="http://xml.apache.org/axis/">INN9XFPYX1</ns1:hostname>
+				</detail>
+			</soapenv:Fault>
+		</soapenv:Body>
+	</soapenv:Envelope>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+	<description>Container extension points / Integration interfaces
+		
+		# Customizing beans using BeanPostProcessor
+		# BeanPostProcessor
+		# Ordered BeanPostProcessor
+		# PriorityOrdered BeanPostProcessor
+		# Built-in BeanPostProcessors
+		
+		# Customizing configuration meta-data using BeanFactoryPostProcessor
+		# BeanFactoryPostProcessor
+		# Ordered BeanFactoryPostProcessor
+		# Lazy init BeanFactoryPostProcessor
+		# Built-in BeanFactoryPostProcessors
+			# PropertyPlaceholderConfigurer
+				# Class name substitution
+			# PropertyOverrideConfigurer
+		
+		# Customizing instantiation logic using FactoryBean 
+	</description>
+	 
+	<!-- An application developer doesn't need to subclass any ApplicationContext implementation classes to extend the Spring 
+		IoC container. -->
+	<!-- You can extend the Spring IoC container infinitely by plugging in implementations of special integration interfaces. -->
+
+	<!-- ### Customizing Beans using BeanPostProcessor interface -->
+	<!-- BeanPostProcesor interface provides two call-back methods to provide your own (or override the container's default) 
+		instantiation logic, dependency-resolution logic, and so forth. -->
+	<!-- You can configure multiple BeanPostProcessor implementations, and can control the order of execution by the container 
+		by setting the "order" by implementing Ordered interface. -->
+	<!-- BeanPostProcessors operate on bean instances after the Spring IoC container instantiates a bean instance. -->
+	<!-- Post-processors can be registered with container by normal bean definition mechanism. On start-up, the IoC container 
+		looks for post-processors defined in meta-data and registers them in the order (if set). -->
+	<!-- Once a bean post-processor is registered with a container, upon bean creation, the bean post-processor gets a callback from the container,
+		1) BEFORE container initialization methods (PostConstruct, afterpropertiesSet, and other declared init methods).
+		2) and afterwards.  -->
+	
+	<!-- ### BeanPostProcessor (Plain or Unordered processors)-->
+	<!-- Classes that implement the BeanPostProcessor interface are special, and so they are treated differently by the container. 
+		All BeanPostProcessors and their directly referenced beans are instantiated on startup, as part of the special startup phase 
+		of the ApplicationContext. Next, all those BeanPostProcessors are registered in a sorted fashion - and applied to all further 
+		beans. -->
+	<!-- BeanPostProcessors are scoped per-container. -->
+	<bean id="simpleBeanPostProcessor" class="mine.spring.containerextn.MyBeanPostprocessor"/>
+	
+	<!-- ### Ordered BeanPostProcessor (Ordered processors) -->
+	<!-- Ordered processors are applied/called before the normal/unordered processors, with the lowest order value having the 
+		highest priority -->
+	<bean id="orderedBeanPostprocessor" class="mine.spring.containerextn.MyOrderedBeanPostprocessor">
+		<property name="order" value="2"/>
+	</bean>
+	
+	<!-- ### PriorityOrdered BeanPostProcessor (Prioritized ordered processors) -->
+	<!-- Order values expressed by PriorityOrdered objects always apply before order values of 'plain' Ordered values -->
+	<bean id="priorityOrderedBeanPostprocessor" class="mine.spring.containerextn.MyPriorityOrderedBeanPostprocessor">
+		<property name="order" value="0"/>
+	</bean>
+	
+	<!-- ### Built-in bean post processors -->
+	<!-- RequiredAnnotationBeanPostProcessor -->
+	
+	
+	<!-- ### Customizing configuration meta-data using BeanFactoryPostProcessor -->
+	<!-- BeanFactoryPostProcessor operates on bean configuration meta-data -->
+	<!-- The Spring IoC container allows BeanFactoryPostProcessors to read the configuration meta-data and change it before 
+		the container instantiates any beans other than BeanFactoryPostProcessors -->
+	<!-- BeanFactoryPostProcessors are scoped per-container. -->
+	<!-- The ApplicationContext detects any beans that are deployed into it and that implement BeanFactoryPostProcessor. -->
+	<!-- A callback method 'postProcessBeanFactory' is invoked by container by passing BeanFactory instance. -->
+	
+	<bean id="simpleBeanFactoryPostProcessor" class="mine.spring.containerextn.MyBeanFactoryPostProcessor"/>
+	
+	<!-- ### Ordered BeanFactoryPostProcessor -->
+	<!-- You can control the order in which these BeanFactoryPostProcessors execute by setting the order property; you can set 
+		this property if your BeanFactoryPostprocessors implements Ordered interface. -->
+		
+	<bean id="orderedBeanFactoryPostProcessor" class="mine.spring.containerextn.MyOrderedBeanFactoryPostProcessor">
+		<property name="order" value="2"/>
+	</bean>
+	
+	<!-- ### Lazy Init BeanFactoryPostprocessor (No Use) -->
+	<!-- Lazy-init: if a BeanFactoryPostprocessor bean definition is marked as "lazy-init" then container doesn't initiate and 
+		register it as bean factory post-processors. -->
+	<!-- NOTE: Lazy init is not working as defined -->	
+	<bean id="lazyInitBeanFactoryPostProcessor" class="mine.spring.containerextn.MyBeanFactoryPostProcessor" lazy-init="true"/>
+
+	<!-- Default-lazy-init: If a beans element is set to have default-lazy-init="true" then don't forget to declare a post-processor 
+		bean with lazi-init="false" -->	
+	<bean id="eagerInitBeanFactoryPostProcessor" class="mine.spring.containerextn.MyBeanFactoryPostProcessor" lazy-init="false"/>
+	
+	<!-- ### Built-in BeanFactoryPostProcessors -->
+	<!-- Spring includes a number of pre-existing bean factory post-processors, such as CustomScopeConfigurer, PropertyPlaceholderConfigurer, 
+		PropertyOverrideConfigurer, and so forth. -->
+	
+	<!-- ### PropertyPlaceholderConfigurer Usage -->
+	<!-- To externalize property values from a bean definition into a separate file in the standard java properties format. -->
+	<!-- systemPropertiesMode: (NEVER, FALLBACK, OR OVERRIDE) The PropertyPlaceholderConfigurer does not look for properties 
+		only in the Properties file you specify, but also checks against the Java System properties if it cannot find a property 
+		you are trying to use. You can customize this behavior by setting the systemPropertiesMode property of the configurer. It 
+		has three values that specify configurer behavior: always override, never override, and override only if the property is 
+		not found in the properties file specified -->
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="classpath:mine/spring/containerextn/PropertyPlaceholder.properties" />
+	</bean>
+	
+	<!-- Context style of Property pleaceholder configurer -  Alternative to PropertyPlaceholderConfigurer bean definition -->
+	<!-- <context:property-placeholder location="classpath:mine/spring/containerextn/PropertyPlaceholder.properties"/> -->
+	
+	<bean id="propPlaceholderUsage" class="mine.spring.containerextn.PropPaceholderUsage">
+		<property name="prop1" value="${prop.key}" />
+	</bean>
+	
+	<!-- ### Class name substitution -->
+	<!-- You can use the PropertyPlaceholderConfigurer to substitute class names, which is sometimes useful when you have to 
+		pick a particular implementation class at runtime -->
+	<bean id="substitutedClassName" class="${PropPaceholderUsage.ClassName}" />
+	
+	<!-- ### PropertyOverrideConfigurer -->
+	<!-- The PropertyOverrideConfigurer, another bean factory post-processor, resembles the PropertyPlaceholderConfigurer, but 
+		unlike the latter, the original definitions can have default values or no values at all for bean properties. If an overriding 
+		Properties file does not have an entry for a certain bean property, the default context definition is used. -->
+	<!-- Property file configuration line format:
+		
+		beanName.property=value
+			
+	 -->
+	<!-- Specified override values are always literal values; they are not translated into bean references. This convention 
+		also applies when the original value in the XML bean definition specifies a bean reference. -->
+	 <bean class="org.springframework.beans.factory.config.PropertyOverrideConfigurer">
+	 	<property name="locations" value="classpath:mine/spring/containerextn/PropertyOverride.properties" />
+	 </bean>
+	 <bean id="propOverrideUsage" class="mine.spring.containerextn.PropOverrideUsage">
+		<property name="property1" value="${prop.key}" />
+		<property name="property2" value="${prop.key}" />
+	</bean>
+		
+	<!-- <context:property-override location="classpath:mine/spring/containerextn/PropertyOverride.properties" /> -->
+	
+	
+	<!-- ### Customizing instantiation logic with the FactoryBean Interface -->
+	<!-- Implement "FactoryBean" interface for objects that are themselves factories. The "FactoryBean" interface is a point 
+		of pluggability into the Spring's IoC container's instantiation logic. -->
+	<!-- If you have a complex initializaton code that is better expressed in Java than XML notation, then create your own FactoryBean, 
+		write the complex code inside that class, and then plug your custom FactoryBean into the container. -->
+	<!-- FactoryBean interface provides three methods:
+	1) Object getObject(): Returns an object  (singleton or prototype)  this factory creates.
+	2) boolean isSingleton(): Returns "true" if this factory returns singletons, "false" otherwise.
+	3) Class getObjectType(): Returns object type (Class object) returned by getObject method. -->
+
+	<!-- When you need to ask a container for an actual FactoryBean instance itself, not the bean it produces, you preface the 
+		bean id with the ampersand symbol & (without quotes) when calling the getBean method of the ApplicationContext, like getBean("&myBean"). -->
+	<bean id="myFactoryBean" class="mine.spring.containerextn.MyFactoryBean"/>
+	
+</beans>

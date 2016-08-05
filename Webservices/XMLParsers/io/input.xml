@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Sample input XML for checking StAX parsers -->
+
+<!DOCTYPE Envelope [
+<!ENTITY envelope.cdata "#CDATA | EMPTY">
+<!ELEMENT Envelope (Header, Body)>
+<!ATTLIST Transaction
+	id CDATA #REQUIRED
+	name CDATA #IMPLIED
+>
+]>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<soapenv:Header>
+		<headerNS:ServiceHeader xmlns:headerNS="http://header.stax.jaxp.xml.mine">
+			<headerNS:credential>
+				<headerNS:userName>StAX</headerNS:userName>
+				<headerNS:password />
+			</headerNS:credential>
+			<headerNS:clientId>StAXParser</headerNS:clientId>
+			<headerNS:clientCountry>
+			</headerNS:clientCountry>
+		</headerNS:ServiceHeader>
+	</soapenv:Header>
+	<soapenv:Body>
+		<bodyNS:Transaction xmlns:bodyNS="http://body.stax.jaxp.xml.mine" id="10" name="ten">
+			<bodyNS:transAmount>30000000</bodyNS:transAmount>
+			<bodyNS:accountNumber>30608661926</bodyNS:accountNumber>
+			<bodyNS:currencyCode>INR</bodyNS:currencyCode>
+			<bodyNS:creditDebitFlag>C</bodyNS:creditDebitFlag>
+			<bodyNS:creditNarration><![CDATA[7037339:::30000000]]></bodyNS:creditNarration>
+		</bodyNS:Transaction>
+	</soapenv:Body>
+</soapenv:Envelope>

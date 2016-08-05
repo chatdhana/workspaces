@@ -1,0 +1,29 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from QuickSortJAXWSService WSDL service -->
+
+  <service name="QuickSortJAXWS" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://ws.mine"/>
+      <parameter name="wsdlServiceElement" value="QuickSortJAXWSService"/>
+      <parameter name="schemaQualified" value="http://ws.mine"/>
+      <parameter name="wsdlServicePort" value="QuickSortJAXWS"/>
+      <parameter name="className" value="mine.ws.QuickSortJAXWSSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="QuickSortJAXWS"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="doQuickSort" qname="operNS:doQuickSort" xmlns:operNS="http://ws.mine" returnQName="retNS:doQuickSortReturn" xmlns:retNS="http://ws.mine" returnType="rtns:int" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:inArray" xmlns:pns="http://ws.mine" type="tns:int" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="doQuickSort"/>
+
+  </service>
+</deployment>

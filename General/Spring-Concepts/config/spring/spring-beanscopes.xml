@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<description>Spring bean scopes:
+		# singleton scope
+		# prototype scope
+		# Singleton beans with prototype-bean dependencies
+		# request scope (only for web-aware ctx)
+		# session scope (only for web-aware ctx)
+		# global session (only for web-aware ctx)
+		# Web Scoped beans as dependencies (sop:scoped-proxy)
+		# custom scopes
+		# custom thread scope
+	</description>
+
+	<!-- Spring framework supports five scopes, three of which are available only if you use a web-aware ApplicationContext. 
+		You can also create a custom scope and register with Container. As of Spring 3.0, a "thread" scope (SimpleThreadScope) is 
+		available, but is not registered by default.
+		
+		Standard scopes:
+			*) singleton
+			*) prototype
+		Web scopes:
+			*) request
+			*) session
+			*) global session
+		Custom scopes:
+			*) thread
+		 -->
+	<!-- By default, a bean will be a singleton, unless the bean has a parent bean definition in which case it will inherit 
+		the parent's scope. -->
+
+
+	<!-- ### Standard scopes  -->
+	<!-- ### singleton scope (for stateless bean)-->
+	<!-- The IoC container creates "exactly one instance" of the object defined by that bean definition in a container. This 
+		single instance is stored in a cache of such singleton beans, and all subsequent requests and references for that named bean 
+		return the cached object. -->
+	<!-- Actual GoF's singleton pattern: Only one instance of a class is created per Class Loader.  -->
+	<!-- Spring's singleton: per container and per bean; Only one instance of a bean definition for a container.  -->
+	<!-- This is the DEFAULT scope in Spring. -->
+	<bean id="singletonBeanByDefault" class="mine.spring.bean.di.SingletonBean">
+		<constructor-arg value="with default bean definition"/>
+	</bean>
+	<bean id="singletonBeanExplicitly" class="mine.spring.bean.di.SingletonBean" scope="singleton">
+		<constructor-arg value="with an explicit scope='singleton' @ bean definition"/>
+	</bean>
+
+
+	<!-- ### prototype scope (for stateful bean) -->
+	<!-- Creates a brand new instance every time a request for that specific bean is made. -->
+	<!-- Use the prototype scope for stateful bean and the singleton scope for stateless bean. -->
+	<!-- In contrast to other bean scopes, Spring doesn't manage the complete lifecycle of a prototype bean: the container instantiates, 
+		configures, and oterwise assembles a prototype object, and hands it to the client, with no further record of that prototype 
+		instance. -->
+	<!-- The destruction lifecycle callbacks are not called for prototype beans, though it is configured. -->
+	<!-- Use custom BeanPostProcessor, to ask for Spring container to handle prototype scoped beans. -->
+	<bean id="prototypeBeanExplicitly" class="mine.spring.bean.di.PrototypeBean" scope="prototype">
+		<constructor-arg value="with an explicit scope='prototype' @ bean definition"/>
+	</bean>
+	
+	<!-- ### Singleton beans with prototype-bean dependencies -->
+	<!-- REFER section "Method Injection" @ spring-dependency-injection.xml-->
+	
+	<!-- ### Web scopes -->
+	<!-- Minor initial configuration is required to  enable web scopes (request, session, and global session) -->
+	<!-- 1) If using MVC: DispatcherServlet implicitly enables it. -->
+	<!-- 2) On Servlet 2.4+ env: configure listener - org.springframework.web.context.request.RequestContextListener -->
+	<!-- 3) On Servlet 2.3 or older: configure filter - org.springframework.web.filter.RequestContextFilter -->
+	<!-- All the above three components do the same: Bind the HTTP request object to the Thread that is servicing that request. -->
+	
+	
+	<!-- ### request scope (only for web-aware app ctx) -->
+	<!-- Bean is scoped at the HTTP request level. Gets discarded when that HTTP request is processed completely. -->
+	
+	<!-- ### session scope (only for web-aware app ctx) -->
+	<!-- Bean is scoped at HTTP Session level. Gets discarded when that HTTP Session is discarded eventually. -->
+	
+	<!-- ### global session scope (for web-aware app ctx and portlet environment) -->
+	<!-- Similar to session scope but applicable to portlet web application.  -->
+	
+	<!-- ### Web Scoped beans as dependencies (<sop:scoped-proxy/>) -->
+	<!-- If you want to inject (for example) an HTTP request scoped bean into another bean, you must inject an AOP proxy in 
+		place of the scoped bean. That is, you need to inject a proxy object that exposes the same public interface as the scoped 
+		object but that can also retrieve the real, target object from the relevant scope (for example, an HTTP request) and delegate 
+		method calls onto the real object. -->
+	<!-- To create such a proxy, you insert a child <aop:scoped-proxy/> element into a scoped bean definition -->
+	<!-- The BeanCreationException is raised, if standard scoped beans are used in conjunction with scoped proxy (<aop:coped-proxy/>. -->
+	
+	<!-- an HTTP Session-scoped bean exposed as a proxy -->
+	<!-- <bean id="sessionScopedBean" class="mine.spring.bean.scope.SessionScopedBean" scope="session" > -->
+		<!-- this next element effects the proxying of the surrounding bean -->
+		<!-- Uncomment the below line to see the result. -->
+		<!-- <aop:scoped-proxy proxy-target-class="false"/> -->
+	<!-- </bean> -->
+	<!-- a singleton-scoped bean injected with a proxy to the above bean -->
+	<!-- <bean id="singletonScoped" class="mine.spring.bean.di.SingletonBean"> -->
+		<!-- <constructor-arg value="A singleton-scoped bean injected with a proxy to the scoped bean."></constructor-arg> -->
+		<!-- a reference to the proxied userPreferences bean -->
+		<!-- <property name="objField" ref="sessionScopedBean" />
+	</bean> -->
+
+	<!-- ### Choosing the type of proxy to create (class-based proxy vs interface-based proxy) -->
+	<!-- Bydefault, container creates CGLIB based class proxy. -->
+	<!-- CGLIB based class proxies only intercept public methods but not non-public methods. -->
+	<!-- To intercept non-public methods, use standard JDK interface-based proxies add an attribute proxy-target-class="false" 
+		at <aop:scoped-proxy/> -->
+	
+	<!-- ### Custom Scopes -->
+	<!-- Spring's bean scoping mechanism is extensible. You can define your own scopes, or even redefine existing scopes (except 
+		singleton and prototype). -->
+	<!-- To create new scope just implement org.springframework.beans.factory.config.Scope interface. -->
+	<!-- Configure scopes:
+		1) Programmatic Registration
+			Scope threadScope = new SimpleThreadScope();
+			beanFactory.registerScope("thread", threadScope);
+		2) Declarative Registration
+			Redefine org.springframework.beans.factory.config.CustomScopeConfigurer bean and set scopes property.
+			
+		 -->
+	<!-- Declarative registration of mythread scope using CustomScopeConfigurer. -->
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+		<property name="scopes">
+			<map>
+				<entry key="mythread">
+					<bean class="mine.spring.bean.scope.MyThreadScope" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- ### custom scope: thread -->
+	<!-- SimpleThreadScope is included in Spring but not registered by default. -->
+	<!-- Declarative  registration of thread scope using CustomScopeConfigurer. -->
+	<bean class="org.springframework.beans.factory.config.CustomScopeConfigurer">
+		<property name="scopes">
+			<map>
+				<entry key="thread">
+					<bean class="org.springframework.context.support.SimpleThreadScope" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+</beans>
+

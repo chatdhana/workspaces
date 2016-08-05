@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+ 
+      
+  <class name="com.virtusa.placement.pojo.RecruiterPojo" table="RECRUITER_PERSONAL">
+	   <id name="username"  column="USERNAME">
+	      <generator class="assigned"/>
+	   </id>
+	   
+ 
+	  <property name="company_name">
+		 <column name="COMPANY_NAME" />
+	  </property>
+	  <property name="email">
+		 <column name="COMPANY_EMAIL" />
+	  </property>
+	  <property name="contactperson_name">
+		 <column name="CONTACTPERSON_NAME " />
+	  </property>
+	  <property name="contactperson_empid">
+		 <column name="CONTACTPERSON_EMPID" />
+	  </property>
+	  <property name="contactaddress">
+		 <column name="CONTACTADDRESS" />
+	  </property>
+	  <property name="city">
+		 <column name="CITY" />
+	  </property>
+	  <property name="phone">
+		 <column name="PHONENUMBER" />
+	  </property>
+	  <property name="mobile">
+		 <column name="MOBILE " />
+	  </property>
+	  
+	  <property name="industry">
+		 <column name="INDUSTRY_TYPE" />
+	  </property>
+  </class>
+  
+  
+  
+  
+  
+  
+</hibernate-mapping>

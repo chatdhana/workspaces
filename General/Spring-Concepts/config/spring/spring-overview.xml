@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<description>Spring bean overview:
+		# Nested value and ref elements
+		# Short-cut alternatives to nested value and ref elements
+		# empty or null value
+		# unnamed bean (autowired)
+		# Inner Bean definition
+		# Inner class names
+		# bean aliasing (in a bean definition itself)
+		# Instantiation with a constructor
+		# Instantiation with a static factory method
+		# Instantiation using an instance factory method
+	</description>
+
+	<!-- <bean id="beanIdentifierOrName" name="alias-1, alias-2; alias-3 alias-4" 
+		class="package-qualified binary name of an implementation class of the bean 
+		being defined" > -->
+	<!-- <property/> or <constructor-arg/> Dependency Injection: References 
+		to other beans that are needed for the bean to do its work; these references 
+		are also called collaborators or dependencies </bean> -->
+
+
+	<!-- ### Nested <value/> and <ref/> -->
+	<bean id="overviewBeanA" class="mine.spring.bean.BeanA">
+		<property name="numberField">
+			<!-- string representation of a property value, may be converted to the 
+				required type using the JavaBeans PropertyEditor machinery. -->
+			<value>10</value>
+		</property>
+		<property name="stringField">
+			<value type="java.lang.String">StringValue</value>
+		</property>
+		<property name="collBeanA">
+			<!-- reference to another bean in this factory or its parent. -->
+			<ref bean="cbA" />
+		</property>
+	</bean>
+
+	<!-- ### short-cut alternatives to <value/> and <ref/> -->
+	<bean id="overviewBeanB" class="mine.spring.bean.BeanB">
+		<property name="numberField" value="10"></property>
+		<!-- A short-cut alternative to a nested "<value>...</value>" -->
+		<property name="stringField" value="StringValue" />
+		<!-- A short-cut alternative to a nested "<ref bean='...'/ >". -->
+		<property name="collBeanB" ref="cbB"></property>
+	</bean>
+
+	<!-- ### empty or null value -->
+	<bean name="emptyBeanA" class="mine.spring.bean.BeanA">
+		<property name="numberField" value="0" />
+		<!-- Denotes an empty String -->
+		<property name="stringField" value="" />
+		<!-- Denotes a Java null value -->
+		<property name="collBeanA">
+			<null></null>
+		</property>
+	</bean>
+
+	<!-- ### unnamed bean (autowired) -->
+	<bean class="mine.spring.bean.BeanA">
+		<!-- You are not required to supply a name or id for a bean. If no name 
+			or id is supplied explicitly, the container generates a unique name for that 
+			bean e.g.(mine.spring.bean.BeanA#0). Motivation for not supplying a name 
+			are related to using "inner beans" and "autowiring collaborators" -->
+	</bean>
+
+
+	<!-- ### Inner Bean definition (It is not possible to inject inner beans into collaborating 
+		beans other than into the enclosing bean) -->
+	<bean name="demoInnerBean" class="mine.spring.bean.BeanA">
+		<property name="collBeanA">
+			<bean class="mine.spring.bean.CollaboratorBeanA"></bean>
+		</property>
+	</bean>
+
+	<!-- ### Inner class names: instantiating static inner class using binary name -->
+	<bean id="staticInnerClass" class="mine.spring.bean.OuterBean$StaticInnerClass"></bean>
+
+	<!-- ### bean aliasing (in a bean definition itself) -->
+	<bean id="aliasingBeanA"
+		name="aliasingBeanA-FIRST, aliasingBeanA-COMMA; aliasingBeanA-SEMICOLON aliasingBeanA-SPACE "
+		class="mine.spring.bean.BeanA">
+		<!-- Every bean has one or more identifiers. These identifiers must be 
+			unique within the container that hosts the bean. A bean usually has only 
+			one identifier, but if it requires more than one, the extra ones can be considered 
+			aliases. You can specify them in the name attribute, separated by a comma 
+			(,), semicolon (;), or white space -->
+	</bean>
+
+	<!-- ### Instantiation with a constructor : managing JavaBean classes/legacy 
+		classes with explicit constructors -->
+	<bean id="constructorInstantiation" class="mine.spring.bean.BeanA">
+		<!-- IoC calls default constructor (no argument constructor) on a bean -->
+		<!-- You can also call parameterized constructors -->
+	</bean>
+
+	<!-- ### Instantiation with a static factory method -->
+	<bean id="staticFactoryMethodWithoutParam" class="mine.spring.bean.LegacyStaticFactory"	factory-method="getProduct">
+	<!-- When defining a bean that you create with a static factory method, 
+		you use the class attribute to specify the class containing the static factory 
+		method and an attribute named factory-method to specify the name of the factory 
+		method itself. -->
+	<!-- such a bean definition is to call static factories in legacy code -->
+		<property name="productName" value="Credit Card"/>
+		<property name="productType" value="C"/>
+	</bean>
+	<bean id="staticFactoryMethodWithParam" class="mine.spring.bean.LegacyStaticFactory"	factory-method="getProduct">
+	<!-- We can also supply arguments to the factory method and set object instance 
+		properties after the object is returned from the factory -->
+		<constructor-arg value="L" />
+		<property name="productName" value="Loan"/>
+		<property name="productType" value="L"/>
+	</bean>
+	
+	
+	<!-- ### Instantiation using an instance factory method -->
+	<bean id="instanceFactoryMethodWithoutParam" factory-bean="legacyInstanceFactory"	factory-method="getProduct" />
+	<bean id="instanceFactoryMethodWithParam" factory-bean="legacyInstanceFactory"	factory-method="getProduct">
+		<constructor-arg value="L" />
+	</bean>
+	
+	<bean id="legacyInstanceFactory" class="mine.spring.bean.LegacyInstanceFactory"/>
+	
+	<bean name="collBeanA, cbA" class="mine.spring.bean.CollaboratorBeanA"></bean>
+	<bean id="collBeanB" name="cbB" class="mine.spring.bean.CollaboratorBeanB"></bean>
+
+</beans>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deployment name="ClientConfig" xmlns="http://xml.apache.org/axis/wsdd/"
+	xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns1="http://xml.apache.org/axis/wsdd/">
+
+	<handler name="log" type="java:org.apache.axis.handlers.LogHandler">
+		<parameter name="LogHandler.fileName" value="C:/dhana/temp_workspace/JAXWS-Client-Axis2/logs/axis.log" />
+	</handler>
+	<ns1:globalConfiguration>
+		<ns1:requestFlow>
+			<handler type="log" />
+		</ns1:requestFlow>
+		<ns1:responseFlow>
+			<handler type="log" />
+		</ns1:responseFlow>
+	</ns1:globalConfiguration>
+	<transport name="http"
+		pivot="java:org.apache.axis.transport.http.HTTPSender">
+	</transport>
+	<transport name="local"
+		pivot="java:org.apache.axis.transport.local.LocalSender" />
+	<transport name="java"
+		pivot="java:org.apache.axis.transport.java.JavaSender" />
+</deployment>

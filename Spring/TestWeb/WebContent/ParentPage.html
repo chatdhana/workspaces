@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Parent Page</title>
+
+<script type="text/javascript">
+	var patientViewWindow = null;
+	function logout() {
+		var canClosePatientViewWindow = false;
+		var isPatientViewWindowOpen = false;
+		var canLogout = false;
+		if (patientViewWindow == null || patientViewWindow.closed) {
+			console.log("Child window is already closed.");
+			isPatientViewWindowOpen = false;
+		} else {
+			isPatientViewWindowOpen = true;
+		}
+
+		if (isPatientViewWindowOpen) {
+			canClosePatientViewWindow = confirm("Patient view window is still open, logout may close it. Do you still want to logout?");
+		}
+
+		if (isPatientViewWindowOpen && canClosePatientViewWindow) {
+			canLogout = true;
+			patientViewWindow.alert("You have been logged out the system!");
+			patientViewWindow.close();
+			patientViewWindow = null;
+		}
+
+		if (canLogout) {
+			// proceed to logout.
+		}
+
+	}
+
+	function openChildWindow() {
+		patientViewWindow = window.open('ChildPage.html', "ChildPage", '');
+	}
+</script>
+</head>
+<body>
+	<input type="button" value="Logout" onclick="logout();" />
+	<input type="button" value="Open Child Window"
+		onclick="openChildWindow();" />
+
+</body>
+</html>

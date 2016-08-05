@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<deploy xmlns="http://www.apache.org/ode/schemas/dd/2007/03"
+	xmlns:sample="http://eclipse.org/bpel/sample" xmlns:custns="http://sa.ws.mine/">
+	<process name="sample:Caller">
+		<active>true</active>
+		<retired>false</retired>
+		<in-memory>true</in-memory>
+		<process-events generate="all" />
+		<provide partnerLink="MyCallerLink">
+			<service name="sample:CallerService" port="CallerPort" />
+		</provide>
+
+		<invoke partnerLink="MyLink">
+          <service name="custns:CustomerSrvName" port="CustomerSrvPortName"/>
+     </invoke>
+	</process>
+</deploy>

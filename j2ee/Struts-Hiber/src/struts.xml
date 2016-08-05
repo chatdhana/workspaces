@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<include file="struts-default.xml" />
+	<constant name="struts.enable.DynamicMethodInvocation"
+		value="false" />
+	<constant name="struts.devMode" value="true" />
+
+	<package name="default" extends="struts-default">
+
+		<action name="adminLogin" class="com.pm.controller.Login">
+			<result name="input">pm_home.jsp</result>
+			<result name="error">error.jsp</result>
+			<result name="SUCCESS">result.jsp</result>
+		</action>
+
+		<action name="iterationTest"
+			class="com.pm.controller.IterationTest">
+			<result name="error">error.jsp</result>
+			<result name="SUCCESS">iterationResult.jsp</result>
+		</action>
+
+		<!-- 
+			<action name="userLogin"
+			class="com.virtusa.placement.controller.SeekerData">
+			<result name="input">SeekerForm.jsp</result>
+			<result name="error">SeekerForm.jsp</result>
+			<result name="invalid">SeekerForm.jsp</result>
+			<result>SeekerProfile.jsp</result>
+			</action>
+		-->
+	</package>
+
+</struts>
+

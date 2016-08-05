@@ -1,0 +1,25 @@
+<project default="build" basedir=".">
+	<property name="PROJ_LOC" value="/var/Dhana/Personal/Materials/Java/java-workspaces/DesignPatterns/Quizz" />
+
+	<target name="clean">
+		<delete dir="${PROJ_LOC}/bin/" />
+		<mkdir dir="${PROJ_LOC}/bin/" />
+	</target>
+	<target name="build_processor" depends="clean">
+		<javac compiler="javac1.6" srcdir="${PROJ_LOC}/src" destdir="${PROJ_LOC}/bin" includejavaruntime="true" includeantruntime="on">
+			<include name="**/SimpleCompileTimeAnnotationProcessor.java"/>
+		</javac>
+	</target>
+	<target name="build" depends="build_processor">
+		<javac compiler="javac1.6" srcdir="${PROJ_LOC}/src" destdir="${PROJ_LOC}/bin" debug="on" includejavaruntime="true" includeantruntime="on">
+			<classpath path="${PROJ_LOC}/bin">
+			</classpath>
+			<compilerarg line="-proc:only" />
+			<compilerarg line="-processor mine.interfaces.annotation.SimpleCompileTimeAnnotationProcessor" />
+			<compilerarg line="-processorpath ${PROJ_LOC}/bin" />
+			<compilerarg line="-s ${PROJ_LOC}/misc" />
+			<compilerarg line="-d ${PROJ_LOC}/misc" />
+		</javac>
+	</target>
+
+</project>

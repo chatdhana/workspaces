@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+      
+  <class name="com.virtusa.placement.pojo.SeekerProfilePojo" table="SEEKER_PROFILE">
+	   <id name="username"  column="USERNAME">
+	      <generator class="assigned"/>
+	   </id>
+
+	  <property name="experience">
+		 <column name="EXPERIENCE" />
+		 
+	  </property>
+	  <property name="minsal">
+		 <column name="MINSAL" />
+	  </property>
+	  <property name="maxsal">
+		 <column name="MAXSAL " />
+	  </property>
+	  <property name="farea">
+		 <column name="FAREA " />
+	  </property>
+	  <property name="industry">
+		 <column name="INDUSTRY" />
+	  </property>
+	  <property name="keyskill1">
+		 <column name="KEYSKILL1 " />
+	  </property>
+	   <property name="keyskill2">
+		 <column name="KEYSKILL2 " />
+	  </property>
+	   <property name="keyskill3">
+		 <column name="KEYSKILL3 " />
+	  </property>
+	  
+
+	   <property name="res_obj">
+		 <column name=" RES_OBJ  " />
+	  </property>
+	 
+	   <property name="twelfth">
+		 <column name="TWELFTH  " />
+	  </property>
+	   <property name="tenth">
+		 <column name=" TENTH" />
+	  </property>
+	   <property name="ug">
+		 <column name=" UG" />
+	  </property>
+	   <property name="ug_stream">
+		 <column name="UG_STREAM" />
+	  </property>
+	   <property name="pg">
+		 <column name=" PG" />
+	  </property>
+	   <property name="pg_stream">
+		 <column name="PG_STREAM" />
+	  </property>
+	  
+	   <property name="doctorate">
+		 <column name="DOCTORATE" />
+	  </property>
+	   <property name="field_phd">
+		 <column name=" FIELD_PHD " />
+	  </property>
+	  <property name="university">
+		 <column name="UNIVERSITY" />
+	  </property>
+	   <property name="upload_resume">
+		 <column name="UPLOAD_RESUME" />
+	  </property>
+	  
+	<!--  <property name="paste_resume">
+		 <column name="PASTE_RESUME " />
+	  </property>--> 
+  </class>
+  
+  
+  
+  
+  
+  
+</hibernate-mapping>
+

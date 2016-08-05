@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://ws.mine" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://ws.mine" xmlns:intf="http://ws.mine" xmlns:tns1="http://bean.mine" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://ws.mine" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://bean.mine"/>
+   <element name="createCustomer">
+    <complexType>
+     <sequence>
+      <element name="cust" type="tns1:Customer"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="createCustomerResponse">
+    <complexType>
+     <sequence>
+      <element name="createCustomerReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateCustomer">
+    <complexType>
+     <sequence>
+      <element name="cust" type="tns1:Customer"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateCustomerResponse">
+    <complexType>
+     <sequence>
+      <element name="updateCustomerReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="enquireCustomer">
+    <complexType>
+     <sequence>
+      <element name="cust" type="tns1:Customer"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="enquireCustomerResponse">
+    <complexType>
+     <sequence>
+      <element name="enquireCustomerReturn" type="tns1:Customer"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findByAadhaarId">
+    <complexType>
+     <sequence>
+      <element name="aadhaarId" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="findByAadhaarIdResponse">
+    <complexType>
+     <sequence>
+      <element name="findByAadhaarIdReturn" type="tns1:Customer"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://bean.mine" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="Customer">
+    <sequence>
+     <element name="aadhaarId" nillable="true" type="xsd:string"/>
+     <element name="annualIncome" nillable="true" type="xsd:long"/>
+     <element name="countryOfBirth" nillable="true" type="xsd:string"/>
+     <element name="dob" nillable="true" type="xsd:dateTime"/>
+     <element name="name" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="findByAadhaarIdResponse">
+
+      <wsdl:part element="impl:findByAadhaarIdResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="createCustomerResponse">
+
+      <wsdl:part element="impl:createCustomerResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="findByAadhaarIdRequest">
+
+      <wsdl:part element="impl:findByAadhaarId" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="createCustomerRequest">
+
+      <wsdl:part element="impl:createCustomer" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="enquireCustomerResponse">
+
+      <wsdl:part element="impl:enquireCustomerResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="enquireCustomerRequest">
+
+      <wsdl:part element="impl:enquireCustomer" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateCustomerResponse">
+
+      <wsdl:part element="impl:updateCustomerResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="updateCustomerRequest">
+
+      <wsdl:part element="impl:updateCustomer" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="CustomerSrv">
+
+      <wsdl:operation name="createCustomer">
+
+         <wsdl:input message="impl:createCustomerRequest" name="createCustomerRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:createCustomerResponse" name="createCustomerResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateCustomer">
+
+         <wsdl:input message="impl:updateCustomerRequest" name="updateCustomerRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:updateCustomerResponse" name="updateCustomerResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="enquireCustomer">
+
+         <wsdl:input message="impl:enquireCustomerRequest" name="enquireCustomerRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:enquireCustomerResponse" name="enquireCustomerResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findByAadhaarId">
+
+         <wsdl:input message="impl:findByAadhaarIdRequest" name="findByAadhaarIdRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:findByAadhaarIdResponse" name="findByAadhaarIdResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="CustomerSrvSoapBinding" type="impl:CustomerSrv">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="createCustomer">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="createCustomerRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="createCustomerResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="updateCustomer">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="updateCustomerRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="updateCustomerResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="enquireCustomer">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="enquireCustomerRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="enquireCustomerResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="findByAadhaarId">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="findByAadhaarIdRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="findByAadhaarIdResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="CustomerSrvService">
+
+      <wsdl:port binding="impl:CustomerSrvSoapBinding" name="CustomerSrv">
+
+         <wsdlsoap:address location="http://localhost:8080/JAXWS/services/CustomerSrv"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

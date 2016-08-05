@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Help Yourself : Search For Errors</title>
+<script type="text/javascript" src='../js/jquery.min.js'></script>
+<script type="text/javascript" src='../js/instantErrorSearch.js'></script>
+<script>
+
+$(document).ready(function() {
+	var paramOptions = {
+	instantSearchURL: '/InstantSearchHandler.action?key=InstantSearch'
+						/*suggestionsHolderDivId: '',
+						formName: '',
+						fieldName:''*/
+						};
+
+	//Fields for which Instant Search is enabled
+	var fieldsList = new Array("errorText");
+	var fieldNameJQ;
+	for ( var i = 0; i < fieldsList.length; i++) {
+		fieldNameJQ = '#' + fieldsList[i];
+		if ($('input[name="' + fieldsList[i] + '"]').length >= 1) {
+			$('input[name="' + fieldsList[i] + '"]').attr(
+					'id', fieldsList[i]);
+			paramOptions['suggestionsHolderDivId'] = '#suggestionsHolder_'
+					+ fieldsList[i];
+			paramOptions['fieldName'] = fieldsList[i];
+			paramOptions['formName'] = 'lookupErrorForm';
+			$(fieldNameJQ).instantSearchFn(paramOptions);
+		}
+	}
+	
+});
+
+var errorMsgList = new Array("Account Locked. Please Contact Admin","Password Expired. Please Reset", "Account Not Found", "Access Denied", "Application Under Maintenance");
+
+var errorMsgHelpLinkList = {
+		1 : "AccountLocked_Help.html",
+		2 : "AccountLocked_Help.html",
+		3 : "AccountLocked_Help.html",
+		4 : "AccountLocked_Help.html",
+		5 : "AccountLocked_Help.html"
+	};
+	
+</script>
+<style>
+.suggestionRow {
+	font-weight: normal;
+	background: #FFFFFF;
+}
+
+.selected {
+	background: #BEBCBC;
+	font-weight: normal;
+}
+.centrePage {
+	position: fixed;
+	top: 35%;
+	left: 35%;
+}
+</style>
+</head>
+<body>
+	<form name="lookupErrorForm">
+		<table class="centrePage">
+			<tr>
+				<td><input name="errorText" type="text" value="Enter Search Text" title="Error Message"  size="40" />
+					<div id="suggestionsHolder_errorText" style="display: none; "></div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

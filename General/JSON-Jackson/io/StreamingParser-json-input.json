@@ -1,0 +1,32 @@
+{
+  "applicant" : {
+    "dateOfBirth" : "27-01-1987",
+    "name" : "Primary App Name",
+    "occupation" : "Software Engineer"
+  },
+  "coApplicants" : [ {
+    "dateOfBirth" : "20-05-1950",
+    "name" : "Co-App 1 Name",
+    "occupation" : "Farmer",
+    "relationshipToPrimary" : "Father"
+  }, {
+    "dateOfBirth" : "22-10-1955",
+    "name" : "Co-App 2 Name",
+    "occupation" : "Farmer",
+    "relationshipToPrimary" : "Mother"
+  } ],
+  "documents" : {
+    "Asset" : {
+      "name" : "Patta of Land",
+      "type" : "Asset"
+    },
+    "Salaried Income" : {
+      "name" : "Pay Slip",
+      "type" : "Salaried Income"
+    }
+  },
+  "loanCategory" : "Secured",
+  "loanNature" : "Personal",
+  "loanNum" : 1,
+  "preApprovedAmt" : 100000.55
+}

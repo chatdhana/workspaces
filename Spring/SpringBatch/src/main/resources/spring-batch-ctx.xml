@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:batch="http://www.springframework.org/schema/batch"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+       http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd">
+
+	<bean id="placeholderProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:batch-derby.properties</value>
+			</list>
+		</property>
+		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+		<property name="order" value="1" />
+	</bean>
+
+	<bean id="batchJobOperator" class="org.springframework.batch.core.launch.support.SimpleJobOperator">
+		<property name="jobExplorer" ref="jobExplorer" />
+		<property name="jobLauncher" ref="jobLauncher" />
+		<property name="jobRepository" ref="jobRepository" />
+		<property name="jobRegistry" ref="jobRegistry" />
+	</bean>
+
+	<bean id="jobRegistry" class="org.springframework.batch.core.configuration.support.MapJobRegistry" />
+
+
+	<bean id="jobExplorer" class="org.springframework.batch.core.explore.support.JobExplorerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+		<property name="jobRepository" ref="jobRepository" />
+		<property name="taskExecutor">
+			<bean class="org.springframework.core.task.SimpleAsyncTaskExecutor" />
+		</property>
+	</bean>
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${batch.jdbc.driver}" />
+		<property name="url" value="${batch.jdbc.url}" />
+		<property name="username" value="${batch.jdbc.user}" />
+		<property name="password" value="${batch.jdbc.password}" />
+		<property name="testWhileIdle" value="${batch.jdbc.testWhileIdle}" />
+		<property name="validationQuery" value="${batch.jdbc.validationQuery}" />
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<batch:job-repository id="jobRepository" table-prefix="MYDBUSER.BATCH_" isolation-level-for-create="REPEATABLE_READ" />
+
+	<batch:job id="jobTemplate" abstract="true" restartable="false">
+	</batch:job>
+
+	<batch:step id="stepTemplate" abstract="true">
+	</batch:step>
+
+	<batch:job id="simpleJob" parent="jobTemplate" restartable="true">
+		<batch:step id="simpleJob.step1" allow-start-if-complete="false" parent="stepTemplate">
+			<batch:tasklet start-limit="3">
+				<batch:chunk reader="simpleItemReader" processor="simpleItemProesser" writer="simpleItemWriter"
+					commit-interval="5">
+				</batch:chunk>
+			</batch:tasklet>
+
+		</batch:step>
+	</batch:job>
+
+	<bean id="simpleItemReader" class="mine.spring.batch.LineItemReader">
+	</bean>
+	<bean id="simpleItemProesser" class="mine.spring.batch.LineItemProcessor">
+	</bean>
+	<bean id="simpleItemWriter" class="mine.spring.batch.LineItemWriter"></bean>
+</beans>

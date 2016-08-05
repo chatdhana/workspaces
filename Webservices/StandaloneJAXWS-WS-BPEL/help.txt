@@ -1,0 +1,12 @@
+1) Create SEI (service endpoint interface), optional
+	- CustomerSrv
+2) Create SIB (service implementation bean)
+	- CustomerSrvImpl
+3) Create Endpoint and publish end point
+	- CustomerSrvEndPoint
+4) Run apt to generate wrapper classes
+cd C:\dhana\temp_workspace\StandaloneJAXWS\src
+C:\zsoft\jdk1.6.0_07\bin\apt -d ../bin mine/ws/sa/CustomerSrv.java mine/ws/sa/CustomerSrvImpl.java
+
+5) Print WSDL (Hit the URL to test)
+http://localhost:9090/CustomerSrv?wsdl

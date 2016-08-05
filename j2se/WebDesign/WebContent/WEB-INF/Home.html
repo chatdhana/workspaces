@@ -1,0 +1,74 @@
+<html>
+<title>
+Home
+</title>
+<head>
+<script type="text/javascript">
+var img1Pos=1;
+var img2Pos=2;
+var img3Pos=3;
+var temp1Pos=1;
+var btnPressed=1;
+function swapImg() {
+if(btnPressed==1)
+{
+temp1Pos=img1Pos;
+img1Pos=img3Pos;
+img3Pos=img2Pos;
+img2Pos=temp1Pos;
+
+}
+if(btnPressed==2)
+{
+temp1Pos=img1Pos;
+img1Pos=img3Pos;
+img2Pos=img2Pos;
+img3Pos=temp1Pos;
+}
+if(btnPressed==3)
+{
+temp1Pos=img1Pos;
+img1Pos=img2Pos;
+img2Pos=img3Pos;
+img3Pos=temp1Pos;
+}
+}
+function btn1press()
+{
+btnPressed=1;
+swapImg();
+document.getElementById("img1").src="img"+img1Pos+".png";
+document.getElementById("img2").src="img"+img2Pos+".png";
+document.getElementById("img3").src="img"+img3Pos+".png";
+}
+function btn2press()
+{
+btnPressed=2;
+swapImg();
+document.getElementById("img1").src="img"+img1Pos+".png";
+document.getElementById("img2").src="img"+img2Pos+".png";
+document.getElementById("img3").src="img"+img3Pos+".png";
+}
+function btn3press()
+{
+btnPressed=3;
+swapImg();
+document.getElementById("img1").src="img"+img1Pos+".png";
+document.getElementById("img2").src="img"+img2Pos+".png";
+document.getElementById("img3").src="img"+img3Pos+".png";
+}
+</script>
+</head>
+<body id="body">
+<img id="bg1" src="bg.png" style="position:absolute;z-index:-1;">
+<center>
+<br/>
+<form action="#"><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+<img id="img1" src="img1.png"><img id="img2" src="img2.png"><img id="img3" src="img3.png"><br/>
+<input type="Button" name="btn1" value="First" style="background-image: one.png" onclick="btn1press();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="Button" name="btn2" value="Center" style="background-image: two.png" onclick="btn2press();">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="Button" name="btn3" value="Last" style="background-image: three.png" onclick="btn3press();">
+</form>
+</center>
+</body>
+</Html>

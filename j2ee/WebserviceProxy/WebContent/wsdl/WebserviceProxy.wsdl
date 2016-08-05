@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://proxy.ws.mine" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://proxy.ws.mine" xmlns:intf="http://proxy.ws.mine" xmlns:tns1="http://entity.ws.mine" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://proxy.ws.mine" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://entity.ws.mine"/>
+   <element name="redirectWebserviceCall">
+    <complexType>
+     <sequence>
+      <element name="obj" type="tns1:DataEntity"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="redirectWebserviceCallResponse">
+    <complexType/>
+   </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://entity.ws.mine" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="DataEntity">
+    <sequence/>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="redirectWebserviceCallRequest">
+
+      <wsdl:part element="impl:redirectWebserviceCall" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:message name="redirectWebserviceCallResponse">
+
+      <wsdl:part element="impl:redirectWebserviceCallResponse" name="parameters">
+
+      </wsdl:part>
+
+   </wsdl:message>
+
+   <wsdl:portType name="WebserviceProxy">
+
+      <wsdl:operation name="redirectWebserviceCall">
+
+         <wsdl:input message="impl:redirectWebserviceCallRequest" name="redirectWebserviceCallRequest">
+
+       </wsdl:input>
+
+         <wsdl:output message="impl:redirectWebserviceCallResponse" name="redirectWebserviceCallResponse">
+
+       </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="WebserviceProxySoapBinding" type="impl:WebserviceProxy">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="redirectWebserviceCall">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="redirectWebserviceCallRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="redirectWebserviceCallResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="WebserviceProxyService">
+
+      <wsdl:port binding="impl:WebserviceProxySoapBinding" name="WebserviceProxy">
+
+         <wsdlsoap:address location="http://localhost:8080/WebserviceProxy/services/WebserviceProxy"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

@@ -1,0 +1,33 @@
+Projcet Creation:
+* Create new Faceted Project
+* Choose Dynamic Module, JAX-RS, JAVA facets
+* Configure User Library for JAX-RS (import JAX-RS implementation libraries)
+* Specify implementor provided Servlet class.
+
+Resource Creation:
+1) Create the Root Resource
+2) Create the application class by extending javax.ws.rs.core.Application
+3) Add servlet entry and init param for application at web.xml
+	 <servlet>
+		<description>JAX-RS Tools Generated - Do not modify</description>
+		<servlet-name>JAX-RS Servlet</servlet-name>
+		<servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>mine.ws.WebServiceJAXRSApplication</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JAX-RS Servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+4) Deploy at servlet container along with Wink libraries
+5) Hit the URL to test
+http://localhost:8080/JAXRS/rest/helloworld?msg=MySuccessMessage
+
+
+Others:
+1) http://localhost:8080/JAXRS/rest/rootres
+2) http://localhost:8080/JAXRS/rest/rootres/subres
+3) http://localhost:8080/JAXRS/rest/rootres/subloc

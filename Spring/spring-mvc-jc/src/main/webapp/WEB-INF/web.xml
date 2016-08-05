@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+	
+	<!-- Default contextClass, if not specified explicitly -->
+	<!-- <context-param>
+		<param-name>contextClass</param-name>
+		<param-value>org.springframework.web.context.support.XmlWebApplicationContext</param-value>
+	</context-param> -->
+	
+	<!-- contextClass for No-XML configuration/Java Config/ Annotation based -->
+	<context-param>
+		<param-name>contextClass</param-name>
+		<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+	</context-param>
+
+	<!-- contextConfigLocation for No-XML configuration -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>mine.sample.spring.config.MvcConfig,mine.sample.spring.config</param-value>
+	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>mvcDispatcherDefault</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+		</init-param>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>mine.sample.spring.config.MvcConfig</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>mvcDispatcher1</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- Uses the context config for this servlet (/WEB-INT/mvcDispatcher1-servlet.xml) -->
+		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>org.springframework.web.context.support.XmlWebApplicationContext</param-value>
+		</init-param>
+		<init-param>
+			<param-name>namespace</param-name> <!-- Changing the default namespace ([servlet-name]-servlet) -->
+			<param-value>mvcDispatcher1-custom-servlet</param-value>
+		</init-param>
+	</servlet>
+	<servlet>
+		<servlet-name>mvcDispatcher2</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- Uses the default context config mentioned in context-param -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value></param-value>
+		</init-param>
+		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>mvcDispatcher3</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- Uses the the given context config -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/mvcDispatcher3-custom-servlet.xml</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>mvcDispatcherDefault</servlet-name>
+		<url-pattern>/app/*</url-pattern>
+	</servlet-mapping>
+
+</web-app>
